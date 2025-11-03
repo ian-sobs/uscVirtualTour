@@ -10,7 +10,7 @@ export default function GoogleMap() {
         defaultCenter={MAP_CONFIG.center}
         defaultZoom={MAP_CONFIG.zoom}
         styles={MAP_STYLES}
-        mapId="usc-campus-map"
+        mapId="1255c889f9110b35d6071258"
         className="w-full h-full"
         disableDefaultUI={false}
         gestureHandling="greedy"
