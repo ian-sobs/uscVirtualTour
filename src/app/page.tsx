@@ -4,8 +4,8 @@ import GoogleMap from './components/Map/GoogleMap';
 import Sidebar from './components/Sidebar/Sidebar';
 import Image from 'next/image';
 
-import usc_logo from '../public/usc-logo.webp';
-import settings from '../public/settings.svg';
+import usc_logo from '@/../public/usc-logo.webp';
+import settings from '@/../public/settings.svg';
 
 export default function Home() {
   return (
