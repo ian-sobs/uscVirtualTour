@@ -1,5 +1,5 @@
 'use client';
-
+import React from 'react';
 import { useState } from 'react';
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
 import { MAP_CONFIG } from '@/app/lib/googleMaps';
@@ -11,9 +11,11 @@ import EventMarker from './EventMarker';
 
 interface GoogleMapProps {
   activeFilters: CategoryFilter;
+  selectedEventId?: number | null;
+  onEventSelect?: (eventId: number | null) => void;
 }
 
-export default function GoogleMap({ activeFilters }: GoogleMapProps) {
+export default function GoogleMap({ activeFilters, selectedEventId, onEventSelect }: GoogleMapProps) {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<{ event: Event; location: Location } | null>(null);
 
@@ -39,12 +41,27 @@ export default function GoogleMap({ activeFilters }: GoogleMapProps) {
   const handleLocationClick = (location: Location) => {
     setSelectedLocation(location);
     setSelectedEvent(null);
+    onEventSelect?.(null);
   };
 
   const handleEventClick = (event: Event, location: Location) => {
     setSelectedEvent({ event, location });
     setSelectedLocation(null);
+    onEventSelect?.(event.id);
   };
+
+  // Handle event selection from EventsPanel
+  React.useEffect(() => {
+    if (selectedEventId) {
+      const event = MOCK_EVENTS.find(e => e.id === selectedEventId);
+      if (event) {
+        const location = MOCK_LOCATIONS.find(loc => loc.id === event.location_id);
+        if (location) {
+          handleEventClick(event, location);
+        }
+      }
+    }
+  }, [selectedEventId]);
 
   return (
     <APIProvider apiKey={MAP_CONFIG.apiKey}>
@@ -110,7 +127,10 @@ export default function GoogleMap({ activeFilters }: GoogleMapProps) {
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-bold text-lg text-gray-800">📅 {selectedEvent.event.theme}</h3>
             <button
-              onClick={() => setSelectedEvent(null)}
+              onClick={() => {
+                setSelectedEvent(null);
+                onEventSelect?.(null);
+              }}
               className="text-gray-500 hover:text-gray-700 text-xl leading-none"
             >
               ×

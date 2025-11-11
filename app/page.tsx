@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import GoogleMap from './components/Map/GoogleMap';
 import Sidebar from './components/Sidebar/Sidebar';
+import EventsPanel from './components/Events/EventsPanel';
 import Image from 'next/image';
 import { CategoryFilter } from './types';
 
@@ -20,6 +21,7 @@ export default function Home() {
     dorms: false,
     sports: true,
   });
+  const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
 
   return (
     <div className="h-screen w-screen flex flex-col">
@@ -33,8 +35,15 @@ export default function Home() {
         <Image src={settings} alt='Settings Icon' className='w-8 h-8 cursor-pointer'/>
       </header>
       <main className="flex-1 relative">
-        <GoogleMap activeFilters={activeFilters} />
+        <GoogleMap 
+          activeFilters={activeFilters}
+          selectedEventId={selectedEventId}
+          onEventSelect={setSelectedEventId}
+        />
         <Sidebar onFilterChange={setActiveFilters} />
+        {activeFilters.events && (
+          <EventsPanel onEventClick={setSelectedEventId} />
+        )}
       </main>
     </div>
   );

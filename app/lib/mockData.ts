@@ -194,7 +194,7 @@ export const MOCK_EVENTS: Event[] = [
     date_time_start: '2025-11-15T09:00:00',
     date_time_end: '2025-11-15T17:00:00',
     visibility: 'public',
-    location_id: 1,
+    location_id: 2,
     org_id: 1,
   },
   {
