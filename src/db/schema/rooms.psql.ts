@@ -1,10 +1,15 @@
-import { integer, pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { smallint, integer, serial, pgTable, text, varchar, index } from "drizzle-orm/pg-core";
+import { buildings } from "./buildings.psql";
+import { offices } from "./offices.psql";
 
 export const rooms = pgTable("rooms", {
-    id: integer().primaryKey(),
+    id: serial().primaryKey(),
     name: varchar({length: 255}).notNull(),
-    building_id: integer(),
-    office_id: integer(),
+    building_id: integer().references(() => buildings.id),
+    office_id: integer().references(() => offices.id),
     description: text(),
-    floor_index: integer()
-});
+    floor_level: smallint()
+}, (table) => [
+    index("office_id_idx").on(table.office_id),
+    index("name_building_composite_idx").on(table.name, table.building_id)
+]);
