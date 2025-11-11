@@ -1,9 +1,13 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { serial, integer, pgTable, varchar, index } from "drizzle-orm/pg-core";
 import { timestamps } from './columns.helpers';
+import { schools } from "./schools.psql";
 
 export const departments = pgTable("departments", {
-  id: integer().primaryKey(),
+  id: serial().primaryKey(),
   name: varchar({ length: 255 }).notNull(),
-  school_id: integer(),
+  school_id: integer().references(() => schools.id),
   ...timestamps
-});
+}, (table) => [
+    index("name_idx").on(table.name),
+    index("school_id_idx").on(table.school_id)
+]);
