@@ -14,5 +14,5 @@ export const users = pgTable("users", {
     ...timestamps
 },(t) => [
     index("last_name_idx").on(t.last_name),
-    unique().on(t.student_or_admin_id, t.role)
+    unique("users_student_or_admin_id_role_composite_unique").on(t.student_or_admin_id, t.role)
 ]);
