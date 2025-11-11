@@ -34,7 +34,7 @@ export const MOCK_LOCATIONS: Location[] = [
   // Academic Buildings
   {
     id: 1,
-    name: 'Main Building',
+    name: 'Bunzel Building',
     category: 'academic',
     description: 'Main academic building with classrooms and faculty offices',
     geometry_id: 1,
@@ -43,7 +43,7 @@ export const MOCK_LOCATIONS: Location[] = [
   },
   {
     id: 2,
-    name: 'Science and Technology Building',
+    name: 'SMED Building',
     category: 'academic',
     description: 'Science laboratories and technology classrooms',
     geometry_id: 2,
@@ -52,9 +52,9 @@ export const MOCK_LOCATIONS: Location[] = [
   },
   {
     id: 3,
-    name: 'Law Building',
+    name: 'SAFAD Buidling',
     category: 'academic',
-    description: 'USC School of Law and Governance',
+    description: 'USC School of Arts, Fine Arts, and Design',
     geometry_id: 3,
     campus_id: 1,
     coordinates: { lat: 10.3528, lng: 123.9118 },
@@ -63,7 +63,7 @@ export const MOCK_LOCATIONS: Location[] = [
     id: 4,
     name: 'Library',
     category: 'study',
-    description: 'USC Talamban Library - Main study area',
+    description: 'Learning Resource Center',
     geometry_id: 4,
     campus_id: 1,
     coordinates: { lat: 10.3533, lng: 123.9115 },
@@ -72,7 +72,7 @@ export const MOCK_LOCATIONS: Location[] = [
   // Food
   {
     id: 5,
-    name: 'Main Canteen',
+    name: 'Bunzel Canteen',
     category: 'food',
     description: 'University cafeteria',
     geometry_id: 5,
@@ -81,7 +81,7 @@ export const MOCK_LOCATIONS: Location[] = [
   },
   {
     id: 6,
-    name: 'Food Court',
+    name: 'SAFAD Canteen',
     category: 'food',
     description: 'Student food stalls and vendors',
     geometry_id: 6,
@@ -101,7 +101,7 @@ export const MOCK_LOCATIONS: Location[] = [
   // Sports/Recreation
   {
     id: 8,
-    name: 'Gymnasium',
+    name: 'BCT',
     category: 'sports',
     description: 'Main sports facility and indoor courts',
     geometry_id: 8,
@@ -110,7 +110,7 @@ export const MOCK_LOCATIONS: Location[] = [
   },
   {
     id: 9,
-    name: 'Sports Complex',
+    name: 'Stadium',
     category: 'sports',
     description: 'Outdoor fields and courts',
     geometry_id: 9,
@@ -121,7 +121,7 @@ export const MOCK_LOCATIONS: Location[] = [
     id: 10,
     name: 'Swimming Pool',
     category: 'sports',
-    description: 'Olympic-size swimming pool',
+    description: 'Olympic-size swimming pool (katong pond sa canteen dapit)',
     geometry_id: 10,
     campus_id: 1,
     coordinates: { lat: 10.3526, lng: 123.9128 },
@@ -130,7 +130,7 @@ export const MOCK_LOCATIONS: Location[] = [
   // Facilities
   {
     id: 11,
-    name: 'Administration Building',
+    name: 'USC-TC Registrar',
     category: 'facilities',
     description: 'Administrative offices and services',
     geometry_id: 11,
@@ -139,9 +139,9 @@ export const MOCK_LOCATIONS: Location[] = [
   },
   {
     id: 12,
-    name: 'Student Center',
+    name: 'Security Office',
     category: 'facilities',
-    description: 'Student services and organizations',
+    description: 'Campus security and assistance',
     geometry_id: 12,
     campus_id: 1,
     coordinates: { lat: 10.3529, lng: 123.9121 },
@@ -150,7 +150,7 @@ export const MOCK_LOCATIONS: Location[] = [
   // Transport/Parking
   {
     id: 13,
-    name: 'Main Parking Area',
+    name: 'Bunzel Parking Area',
     category: 'transport',
     description: 'Primary parking facility',
     geometry_id: 13,
@@ -159,7 +159,7 @@ export const MOCK_LOCATIONS: Location[] = [
   },
   {
     id: 14,
-    name: 'Gate 1',
+    name: 'Gate 3',
     category: 'transport',
     description: 'Main entrance',
     geometry_id: 14,
@@ -170,7 +170,7 @@ export const MOCK_LOCATIONS: Location[] = [
   // Dorms/Residences
   {
     id: 15,
-    name: 'Student Dormitory A',
+    name: 'USC Girls Dormitory',
     category: 'dorms',
     description: 'On-campus housing',
     geometry_id: 15,
@@ -180,10 +180,10 @@ export const MOCK_LOCATIONS: Location[] = [
 ];
 
 export const MOCK_BUILDINGS: Building[] = [
-  { id: 1, name: 'Main Building', campus_id: 1, floor_array: [1, 2, 3, 4], location_id: 1 },
-  { id: 2, name: 'Science and Technology Building', campus_id: 1, floor_array: [1, 2, 3], location_id: 2 },
-  { id: 3, name: 'Law Building', campus_id: 1, floor_array: [1, 2, 3, 4, 5], location_id: 3 },
-  { id: 4, name: 'Library', campus_id: 1, floor_array: [1, 2, 3, 4, 5], location_id: 4 },
+  { id: 1, name: 'Bunzel Building', campus_id: 1, floor_array: [1, 2, 3, 4], location_id: 1 },
+  { id: 2, name: 'SMED Building', campus_id: 1, floor_array: [1, 2, 3], location_id: 2 },
+  { id: 3, name: 'SAFAD Building', campus_id: 1, floor_array: [1, 2, 3, 4, 5], location_id: 3 },
+  { id: 4, name: 'Learning Resource Center', campus_id: 1, floor_array: [1, 2, 3, 4, 5], location_id: 4 },
 ];
 
 export const MOCK_EVENTS: Event[] = [
@@ -199,8 +199,8 @@ export const MOCK_EVENTS: Event[] = [
   },
   {
     id: 2,
-    theme: 'Basketball Tournament',
-    description: 'Inter-department basketball championship',
+    theme: 'SAS 3x3 Basketball Tournament',
+    description: 'SAS Inter-department basketball championship',
     date_time_start: '2025-11-12T14:00:00',
     date_time_end: '2025-11-12T18:00:00',
     visibility: 'public',
@@ -209,8 +209,8 @@ export const MOCK_EVENTS: Event[] = [
   },
   {
     id: 3,
-    theme: 'Cultural Festival',
-    description: 'USC Talamban cultural celebration',
+    theme: 'USC Days',
+    description: 'USC Days WOOHOO',
     date_time_start: '2025-11-20T10:00:00',
     date_time_end: '2025-11-20T20:00:00',
     visibility: 'public',
