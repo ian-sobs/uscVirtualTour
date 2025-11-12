@@ -4,8 +4,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ### Prerequisites 
 
-1. Make a copy of the ".env.example" file and change the filename of the copy to ".env" (this .env file is where you put the values of your environment variables).
-2. Set up your your environment variables in the .env file. Make sure the database name in your `DATABASE_URL` matches the name of the database server you will make in the next step.
+1. Make a copy of the `.env.example` file and change the filename of the copy to `.env` (this `.env` file is where you put the values of your environment variables).
+2. Set up your your environment variables in the `.env` file. Make sure the database name in your `DATABASE_URL` matches the name of the database server you will make in the next step.
 3. Create an empty database which has the Postgis extensions (just in case we want to have geometries and geopositions in the future).
 ```
 CREATE EXTENSION postgis;
@@ -15,7 +15,7 @@ CREATE EXTENSION postgis_topology;
 ### What to do to run the app
 
 > Note: I modified `dev` script so that when you run `npm run dev`, migrations are performed first to always ensure your local database is up to date.
-> - Ian Sobs
+> ~ Ian Sobs
 
 First, run the development server:
 
@@ -48,10 +48,10 @@ Below is the workflow when modifying the database:
 2. Modify your schema.
 3. Run `npx drizzle-kit generate` to create migration for your changes.
 4. Run `npx drizzle-kit migrate` to apply all unapplied migrations, including yours.
-5. Run `git pull origin main` again before making a pull request. If there are schema updates, do the following before making a pull request:
-    *5.1.* Resolve any conflicts
-    *5.2.* Run `npx drizzle-kit generate` to create migration for conflict resolution changes.
-    *5.3.* Run `npx drizzle-kit migrate` to apply all unapplied migrations, including the new one.
+5. Run `git pull origin main` again before making a pull request. If there are schema updates, do the following (in order from top to bottom) before making a pull request:
+   - Resolve any conflicts
+   - Run `npx drizzle-kit generate` to create migration for conflict resolution changes.
+   - Run `npx drizzle-kit migrate` to apply all unapplied migrations, including the new one.
 
 
 ## Learn More
