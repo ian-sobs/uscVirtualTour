@@ -9,5 +9,5 @@ export const offices = pgTable("offices", {
     school_id: integer().references(() => schools.id, {onDelete: 'set null'})
 }, (table) => [
     index("department_idx").on(table.department_id),
-    index("school_idx").on(table.school_id)
+    index("school_of_office_idx").on(table.school_id)
 ]);

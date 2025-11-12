@@ -9,5 +9,5 @@ export const departments = pgTable("departments", {
   ...timestamps
 }, (table) => [
     index("department_name_idx").on(table.name),
-    index("school_idx").on(table.school_id)
+    index("school_of_department_idx").on(table.school_id)
 ]);
