@@ -7,8 +7,8 @@ import EventsPanel from './components/Events/EventsPanel';
 import Image from 'next/image';
 import { CategoryFilter } from './types';
 
-import usc_logo from '../public/usc-logo.webp';
-import settings from '../public/settings.svg';
+import usc_logo from '@/../public/usc-logo.webp';
+import settings from '@/../public/settings.svg';
 
 export default function Home() {
   const [activeFilters, setActiveFilters] = useState<CategoryFilter>({
