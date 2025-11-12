@@ -15,6 +15,7 @@ CREATE EXTENSION postgis_topology;
 ### What to do to run the app
 
 > Note: I modified `dev` script so that when you run `npm run dev`, migrations are performed first to always ensure your local database is up to date.
+> - Ian Sobs
 
 First, run the development server:
 
@@ -44,12 +45,10 @@ We are following a "Codebase first" approach. Codebase first is when database sc
 Below is the workflow when modifying the database:
 
 1. In terminal/CMD run `git pull origin main` so that you get the updates made by other devs in the schema definition of the codebase. Resolve any conflicts that arise.
-2. In terminal/CMD run `npx drizzle-kit generate` to make migration files.
-3. In terminal/CMD run `npx drizzle-kit migrate` to perform migrations so that your local database gets updated.
-4. Modify the schema definition of the database in the code.
-5. In terminal/CMD run `npx drizzle-kit generate` again to make migration files of your modifications.
-6. In terminal/CMD run `npx drizzle-kit migrate` again to perform migrations so that your local database gets updated with your modifications
-7. Repeat step 1 again and if there are updates to the database schema, repeat step 2 and then step 3. Afterwards you can make a pull request.
+2. Modify the schema definition of the database in the code.
+3. In terminal/CMD run `npx drizzle-kit generate` to make migration files.
+4. In terminal/CMD run `npx drizzle-kit migrate` to perform migrations so that your local database gets updated.
+5. Repeat step 1 again and if there are updates to the database schema, repeat step 3 and then step 4. Afterwards you can make a pull request.
 
 
 ## Learn More
