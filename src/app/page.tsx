@@ -10,7 +10,7 @@ import { CategoryFilter } from "./types";
 import { Building } from "@/types";
 
 import usc_logo from "@/../public/usc-logo.webp";
-import settings from "@/../public/settings.svg";
+import profile from "@/../public/profile.svg";
 
 export default function Home() {
 	const [activeFilters, setActiveFilters] = useState<CategoryFilter>({
@@ -43,11 +43,13 @@ export default function Home() {
 						className="bg-transparent outline-none w-200"
 					/>
 				</div>
-				<Image
-					src={settings}
-					alt="Settings Icon"
-					className="w-8 h-8 cursor-pointer"
-				/>
+				<div className="bg-gray-400 rounded-full p-1">
+					<Image
+						src={profile}
+						alt="Profile Icon"
+						className="w-8 h-8 cursor-pointer brightness-0 invert"
+					/>
+				</div>
 			</header>
 			<main className="flex-1 relative">
 				<GoogleMap
