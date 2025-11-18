@@ -49,7 +49,7 @@ export default function Sidebar({ onFilterChange }: SidebarProps) {
   };
 
   return (
-    <aside className={`absolute left-4 top-4 bg-white rounded-lg shadow-lg w-64 z-20 transition-all duration-300 ${
+    <aside className={`absolute left-4 top-25 bg-white rounded-lg shadow-lg w-64 z-20 transition-all duration-300 ${
       isExpanded ? 'max-h-[calc(100vh-120px)]' : 'max-h-14'
     }`}>
       <div 
