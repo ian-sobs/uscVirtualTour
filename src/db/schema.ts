@@ -108,6 +108,16 @@ export const events = pgTable("events", {
     index("org_idx").on(table.org_id)
 ]);
 
+export const offices = pgTable("offices", {
+    id: serial().primaryKey(),
+    name: varchar({ length: 255 }).notNull(),
+    department_id: integer().references(() => departments.id, {onDelete: 'set null'}),
+    school_id: integer().references(() => schools.id, {onDelete: 'set null'})
+}, (table) => [
+    index("department_idx").on(table.department_id),
+    index("school_of_office_idx").on(table.school_id)
+]);
+
 export const rooms = pgTable("rooms", {
     id: serial().primaryKey(),
     name: varchar({length: 255}).notNull(),
