@@ -10,14 +10,15 @@ export const users = pgTable("users", {
     email: varchar({length: 320}).notNull(),
     // student_or_admin_id: integer(), // we might use the username plugin so this might be removed
     username: varchar({length: 255}).notNull(), //this is the student ID or admin ID field. its now called "username" kay arte ang better-auth
+    displayUsername: varchar({length: 255}).notNull(),
     first_name: varchar({ length: 255 }).notNull(),
     mid_name: varchar({ length: 255 }), 
     last_name: varchar({ length: 255 }).notNull(),
-    role: roleEnum(),
+    //role: roleEnum(),
     ...timestamps
 },(t) => [
     index("last_name_idx").on(t.last_name),
-    unique("username_role_composite_unique").on(t.username, t.role)
+    unique("username_unique").on(t.username)
 ]);
 
 export const organizations = pgTable("organizations", {
