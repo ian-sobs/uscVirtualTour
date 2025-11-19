@@ -2,6 +2,7 @@ import { serial, integer, pgTable, varchar, index } from "drizzle-orm/pg-core";
 import { departments } from "./departments.psql";
 import { schools } from "./schools.psql";
 
+//done
 export const offices = pgTable("offices", {
     id: serial().primaryKey(),
     name: varchar({ length: 255 }).notNull(),

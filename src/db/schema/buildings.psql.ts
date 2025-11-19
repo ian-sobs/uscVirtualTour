@@ -1,8 +1,9 @@
 import { smallint, integer, serial, pgTable, varchar, index } from "drizzle-orm/pg-core";
-import { timestamps } from './columns.helpers';
+import { timestamps } from '../columns.helpers';
 import { campuses } from "./campuses.psql";
 import { locations } from "./locations.psql";
 
+// done
 export const buildings = pgTable("buildings", {
     id: serial().primaryKey(),
     name: varchar({ length: 255 }).notNull(),

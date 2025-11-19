@@ -1,6 +1,8 @@
 import { integer, index, serial, pgTable, varchar, text, timestamp } from "drizzle-orm/pg-core";
-import { timestamps } from './columns.helpers';
+import { timestamps } from '../columns.helpers';
 
+
+//done
 export const event_groups = pgTable("event_groups", {
     id:serial().primaryKey(),
     name: varchar({ length: 255 }).notNull(),

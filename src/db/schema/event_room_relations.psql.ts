@@ -2,6 +2,7 @@ import { integer, pgTable, primaryKey, index } from "drizzle-orm/pg-core";
 import { events } from "./events.psql";
 import { rooms } from "./rooms.psql";
 
+//done
 export const event_room_relations = pgTable("event_room_relations", {
     event_id: integer().references(() => events.id, {onDelete: 'cascade'}),
     room_id: integer().references(() => rooms.id, {onDelete: 'cascade'})

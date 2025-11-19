@@ -1,6 +1,7 @@
 import { serial, pgTable, varchar, text, index } from "drizzle-orm/pg-core";
-import { timestamps } from './columns.helpers';
+import { timestamps } from '../columns.helpers';
 
+//done 
 export const campuses = pgTable("campuses", {
   id: serial().primaryKey(),
   name: varchar({ length: 255 }).notNull(),

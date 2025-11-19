@@ -1,8 +1,9 @@
 import { integer, pgTable, primaryKey, index } from "drizzle-orm/pg-core";
-import { timestamps } from './columns.helpers';
+import { timestamps } from '../columns.helpers';
 import { events } from "./events.psql";
 import { locations } from "./locations.psql";
 
+//done
 export const event_location_relations = pgTable("event_location_relations", {
     location_id: integer().references(() => locations.id, {onDelete: 'cascade'}),
     event_id: integer().references(() => events.id, {onDelete: 'cascade'})

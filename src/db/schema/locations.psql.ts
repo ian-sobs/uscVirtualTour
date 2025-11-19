@@ -2,6 +2,7 @@ import { integer, serial, pgTable, text, varchar, pgEnum, index } from "drizzle-
 
 import { campuses } from "./campuses.psql";
 
+//done
 export const categoryEnum = pgEnum('category', ['buildings', 'events', 'food', 'facilities', 'transport_parking', 'study_areas', 'dorms_residences', 'sports_recreation']);
 
 export const locations = pgTable("locations", {

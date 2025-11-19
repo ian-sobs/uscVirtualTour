@@ -2,6 +2,7 @@ import { integer, pgTable, boolean, primaryKey, index } from "drizzle-orm/pg-cor
 import { users } from "./users.psql";
 import { organizations } from "./organizations.psql";
 
+//done
 export const user_org_relations = pgTable("user_org_relations", {
     user_id: integer().references(() => users.id, {onDelete: 'cascade'}),
     org_id: integer().references(() => organizations.id, {onDelete: 'cascade'}),

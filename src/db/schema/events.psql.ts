@@ -1,8 +1,10 @@
 import { integer, pgTable, text, varchar, timestamp, pgEnum, serial, index } from "drizzle-orm/pg-core";
-import { timestamps } from './columns.helpers';
+import { timestamps } from '../columns.helpers';
 import { event_groups } from "./event_groups.psql";
 import { organizations } from "./organizations.psql";
 
+
+//done
 export const visibilityEnum = pgEnum('visibility', ['everyone', 'only_students', 'only_organization_members']);
 
 export const events = pgTable("events", {
