@@ -74,7 +74,18 @@ export const buildings = pgTable("buildings", {
     index("campus_idx").on(table.campus_id)
 ]);
 
-
+export const event_groups = pgTable("event_groups", {
+    id:serial().primaryKey(),
+    name: varchar({ length: 255 }).notNull(),
+    description: text(),
+    date_time_start: timestamp({withTimezone: true}),
+    date_time_end: timestamp({withTimezone: true}),
+    custom_marker: text(),
+    ...timestamps
+}, (table) => [
+    index("event_group_date_time_start_idx").on(table.date_time_start),
+    index("event_group_date_time_end_idx").on(table.date_time_end)
+]);
 
 
 export const visibilityEnum = pgEnum('visibility', ['everyone', 'only_students', 'only_organization_members']);
