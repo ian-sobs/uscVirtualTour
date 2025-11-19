@@ -155,3 +155,11 @@ export const event_room_relations = pgTable("event_room_relations", {
     primaryKey({ name: 'event_room_composite_pk', columns: [table.event_id, table.room_id] }),
     index("event_room_composite_idx").on(table.event_id, table.room_id)
 ]);
+
+export const event_location_relations = pgTable("event_location_relations", {
+    location_id: integer().references(() => locations.id, {onDelete: 'cascade'}),
+    event_id: integer().references(() => events.id, {onDelete: 'cascade'})
+}, (table) => [
+    primaryKey({ name: 'location_event_composite_pk', columns: [table.location_id, table.event_id] }),
+    index("location_event_composite_idx").on(table.location_id, table.event_id)
+]);
