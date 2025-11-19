@@ -1,4 +1,4 @@
-import { smallint, integer, serial, pgTable, varchar, pgEnum, unique, text, index } from "drizzle-orm/pg-core";
+import { smallint, integer, serial, pgTable, varchar, pgEnum, boolean, unique, text, index } from "drizzle-orm/pg-core";
 import {timestamps} from './columns.helpers'
 
 export const roleEnum = pgEnum('role', ['student', 'admin']);
@@ -16,6 +16,13 @@ export const users = pgTable("users", {
     index("last_name_idx").on(t.last_name),
     unique("users_student_or_admin_id_role_composite_unique").on(t.student_or_admin_id, t.role)
 ]);
+
+export const organizations = pgTable("organizations", {
+    id: serial().primaryKey(),
+    logo: text(),
+    is_student_org: boolean(),
+    ...timestamps
+});
 
 export const campuses = pgTable("campuses", {
   id: serial().primaryKey(),
