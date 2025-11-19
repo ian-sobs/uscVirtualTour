@@ -1,4 +1,4 @@
-import { smallint, integer, serial, pgTable, varchar, pgEnum, boolean, unique, text, index } from "drizzle-orm/pg-core";
+import { smallint, integer, serial, pgTable, primaryKey, varchar, pgEnum, boolean, unique, text, index } from "drizzle-orm/pg-core";
 import {timestamps} from './columns.helpers'
 
 export const roleEnum = pgEnum('role', ['student', 'admin']);
@@ -23,6 +23,17 @@ export const organizations = pgTable("organizations", {
     is_student_org: boolean(),
     ...timestamps
 });
+
+export const user_org_relations = pgTable("user_org_relations", {
+    user_id: integer().references(() => users.id, {onDelete: 'cascade'}),
+    org_id: integer().references(() => organizations.id, {onDelete: 'cascade'}),
+    can_post_events: boolean(),
+    can_add_members: boolean(),
+    can_remove_members: boolean()
+}, (table) => [
+    primaryKey({ name: 'user_org_composite_pk', columns: [table.user_id, table.org_id] }),
+    index("user_org_composite_idx").on(table.user_id, table.org_id)
+]);
 
 export const campuses = pgTable("campuses", {
   id: serial().primaryKey(),
