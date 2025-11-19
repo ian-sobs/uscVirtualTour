@@ -116,6 +116,16 @@ export const schools = pgTable("schools", {
     index("school_name_idx").on(table.name)
 ]);
 
+export const departments = pgTable("departments", {
+  id: serial().primaryKey(),
+  name: varchar({ length: 255 }).notNull(),
+  school_id: integer().references(() => schools.id, {onDelete: 'cascade'}),
+  ...timestamps
+}, (table) => [
+    index("department_name_idx").on(table.name),
+    index("school_of_department_idx").on(table.school_id)
+]);
+
 export const offices = pgTable("offices", {
     id: serial().primaryKey(),
     name: varchar({ length: 255 }).notNull(),
