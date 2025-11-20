@@ -13,7 +13,8 @@ export const auth = betterAuth({
         fields: {
             name: "first_name",
             createdAt: "created_at",
-            updatedAt: "updated_at"
+            updatedAt: "updated_at",
+            emailVerified: "email_verified"
         },
         additionalFields: {
             username: {
