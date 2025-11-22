@@ -32,7 +32,7 @@ export const sessionRelations = authSchema.sessionRelations
 export const accountRelations = authSchema.accountRelations;
 
 export const user_profiles = pgTable("user_profiles", {
-    user_id: integer().references(() => users.id, {onDelete: 'cascade'}),
+    user_id: text().references(() => users.id, {onDelete: 'cascade'}),
     role: roleEnum().default("student")
 }, (table) => [
     unique("user_profile_unique").on(table.user_id)
@@ -46,7 +46,7 @@ export const organizations = pgTable("organizations", {
 });
 
 export const user_org_relations = pgTable("user_org_relations", {
-    user_id: integer().references(() => users.id, {onDelete: 'cascade'}),
+    user_id: text().references(() => users.id, {onDelete: 'cascade'}),
     org_id: integer().references(() => organizations.id, {onDelete: 'cascade'}),
     can_post_events: boolean(),
     can_add_members: boolean(),
