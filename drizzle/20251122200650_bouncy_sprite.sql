@@ -42,8 +42,10 @@ CREATE TABLE "verifications" (
 );
 --> statement-breakpoint
 ALTER TABLE "users" DROP CONSTRAINT "users_student_or_admin_id_role_composite_unique";--> statement-breakpoint
+ALTER TABLE "user_org_relations" DROP CONSTRAINT "user_org_relations_user_id_users_id_fk";
 ALTER TABLE "user_org_relations" ALTER COLUMN "user_id" SET DATA TYPE text;--> statement-breakpoint
 ALTER TABLE "users" ALTER COLUMN "id" SET DATA TYPE text;--> statement-breakpoint
+ALTER TABLE "user_org_relations" ADD CONSTRAINT "user_org_relations_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "users" ALTER COLUMN "email" SET DATA TYPE text;--> statement-breakpoint
 ALTER TABLE "users" ALTER COLUMN "first_name" SET DATA TYPE text;--> statement-breakpoint
 ALTER TABLE "users" ALTER COLUMN "mid_name" SET DATA TYPE text;--> statement-breakpoint
