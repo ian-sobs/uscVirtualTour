@@ -2,7 +2,7 @@ import { smallint, integer, serial, timestamp, pgTable,
         primaryKey, varchar, pgEnum, boolean, unique, 
         text, index } from "drizzle-orm/pg-core";
 import {timestamps} from './columns.helpers'
-import { users } from "./auth-schema";
+import { users, sessions, accounts, verifications, userRelations, sessionRelations, accountRelations} from "./auth-schema";
 
 export const roleEnum = pgEnum('role', ['student', 'admin']);
 
@@ -382,5 +382,12 @@ export const schema = {
     departmentsRelations,
     officesRelations,
     roomsRelations,
-    eventRoomRelations
+    eventRoomRelations,
+
+    sessions, 
+    accounts, 
+    verifications, 
+    userRelations, 
+    sessionRelations, 
+    accountRelations
 };
