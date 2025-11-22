@@ -2,25 +2,26 @@ import { smallint, integer, serial, timestamp, pgTable,
         primaryKey, varchar, pgEnum, boolean, unique, 
         text, index } from "drizzle-orm/pg-core";
 import {timestamps} from './columns.helpers'
+import { users } from "./auth-schema";
 
 export const roleEnum = pgEnum('role', ['student', 'admin']);
 
-export const users = pgTable("users", {
-    id: serial().primaryKey(),
-    email: varchar({length: 320}).notNull(),
-    email_verified: boolean(),
-    // student_or_admin_id: integer(), // we might use the username plugin so this might be removed
-    username: varchar({length: 255}).notNull(), //this is the student ID or admin ID field. its now called "username" kay arte ang better-auth
-    displayUsername: varchar({length: 255}).notNull(),
-    first_name: varchar({ length: 255 }).notNull(),
-    mid_name: varchar({ length: 255 }), 
-    last_name: varchar({ length: 255 }).notNull(),
-    //role: roleEnum(),
-    ...timestamps
-},(t) => [
-    index("last_name_idx").on(t.last_name),
-    unique("username_unique").on(t.username)
-]);
+// export const users = pgTable("users", {
+//     id: serial().primaryKey(),
+//     email: varchar({length: 320}).notNull(),
+//     email_verified: boolean(),
+//     // student_or_admin_id: integer(), // we might use the username plugin so this might be removed
+//     username: varchar({length: 255}).notNull(), //this is the student ID or admin ID field. its now called "username" kay arte ang better-auth
+//     displayUsername: varchar({length: 255}).notNull(),
+//     first_name: varchar({ length: 255 }).notNull(),
+//     mid_name: varchar({ length: 255 }), 
+//     last_name: varchar({ length: 255 }).notNull(),
+//     //role: roleEnum(),
+//     ...timestamps
+// },(t) => [
+//     index("last_name_idx").on(t.last_name),
+//     unique("username_unique").on(t.username)
+// ]);
 
 export const user_profiles = pgTable("user_profiles", {
     user_id: integer().references(() => users.id, {onDelete: 'cascade'}),
