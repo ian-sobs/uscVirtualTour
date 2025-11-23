@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { authClient } from "@/lib/auth-client"; 
+import { useRouter } from "next/navigation";
 
 import { uscLogo } from "../lib/icons";
+
 
 type FieldErrors = {
     email?: string;
@@ -18,6 +20,8 @@ type FieldErrors = {
 };
 
 export default function RegisterPage() {
+    const router = useRouter();
+
     const [formData, setFormData] = useState({
         email: '',
         firstName: '',
@@ -135,8 +139,7 @@ export default function RegisterPage() {
             password: formData.password, // required
             username: formData.username, // required
             displayUsername: formData.username,
-            ...roleField,
-            callbackURL: "/"
+            ...roleField
         }, {
             // onRequest: (ctx) => {
             //     //show loading
@@ -145,6 +148,7 @@ export default function RegisterPage() {
                 //redirect to the dashboard or sign in page
                 console.log(ctx.response.body)
                 setIsLoading(false)
+                router.push("/");
             },
             onError: (ctx) => {
                 setIsLoading(false)
