@@ -20,23 +20,23 @@ export const auth = betterAuth({
             username: {
                 type: "string",
                 required: true,
-                input: false, // don't allow user to set username
+                input: true, // don't allow user to set username
             },
             displayUsername: {
                 type: "string",
                 required: false,
-                input: false, // don't allow user to set role
+                input: true, // don't allow user to set role
             },
             mid_name:{
                 type: "string",
                 required: false,
-                input: false, // don't allow user to set username
+                input: true, // don't allow user to set username
             },
             last_name:{
                 type: "string",
                 required: true,
                 defaultValue: "joe",
-                input: false, // don't allow user to set username
+                input: true, // don't allow user to set username
             },
         },
     },
