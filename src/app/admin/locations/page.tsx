@@ -193,14 +193,14 @@ export default function LocationsPage() {
 
   const getCategoryBadgeColor = (category: Location['category']) => {
     const colors: Record<NonNullable<Location['category']>, string> = {
-      buildings: 'bg-blue-100 text-blue-800',
-      events: 'bg-purple-100 text-purple-800',
+      buildings: 'bg-red-100 text-red-800',
+      events: 'bg-blue-100 text-blue-800',
       food: 'bg-orange-100 text-orange-800',
-      facilities: 'bg-gray-100 text-gray-800',
-      transport_parking: 'bg-yellow-100 text-yellow-800',
-      study_areas: 'bg-green-100 text-green-800',
+      facilities: 'bg-purple-100 text-purple-800',
+      transport_parking: 'bg-gray-100 text-gray-800',
+      study_areas: 'bg-yellow-100 text-yellow-800',
       dorms_residences: 'bg-pink-100 text-pink-800',
-      sports_recreation: 'bg-red-100 text-red-800',
+      sports_recreation: 'bg-green-100 text-green-800',
     };
     return category ? colors[category] : 'bg-gray-100 text-gray-800';
   };

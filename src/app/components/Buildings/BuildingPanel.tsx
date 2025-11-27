@@ -78,7 +78,7 @@ export default function BuildingPanel({ building, onClose }: BuildingPanelProps)
                     }`}
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    Floor {floor}
+                    {floor < 0 ? `Basement ${Math.abs(floor)}` : `Floor ${floor}`}
                   </button>
                 ))}
               </div>
@@ -87,7 +87,7 @@ export default function BuildingPanel({ building, onClose }: BuildingPanelProps)
               {selectedFloor !== null && (
                 <div className="bg-gray-50 rounded-lg p-5 border border-gray-200 animate-slideDown">
                   <h4 className="font-bold text-lg mb-2 text-gray-900">
-                    Floor {selectedFloor}
+                    {selectedFloor < 0 ? `Basement ${Math.abs(selectedFloor)}` : `Floor ${selectedFloor}`}
                   </h4>
                   <p className="text-gray-600 text-sm">
                     Floor information and room details coming soon.

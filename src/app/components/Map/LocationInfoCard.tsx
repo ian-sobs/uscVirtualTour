@@ -40,7 +40,7 @@ export default function LocationInfoCard({ location, onClose, onGetDirections }:
             <h3 className="text-lg font-bold">{location.name}</h3>
             {location.category && (
               <p className="text-xs opacity-90 mt-1 capitalize">
-                {location.category.replace(/_/g, ' ')}
+                {location.category.replace(/_/g, ' / ')}
               </p>
             )}
           </div>

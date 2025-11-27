@@ -11,15 +11,17 @@ import BuildingMarker from './BuildingMarker';
 import LocationMarker from './LocationMarker';
 import BuildingInfoCard from './BuildingInfoCard';
 import LocationInfoCard from './LocationInfoCard';
+import SearchPanner from './SearchPanner';
 
 interface GoogleMapProps {
   activeFilters: CategoryFilter;
   selectedEventId?: number | null;
   onEventSelect?: (eventId: number | null) => void;
   onBuildingSelect?: (building: Building | null) => void;
+  searchResult?: { coordinates: { lat: number; lng: number }; type: 'building' | 'location'; buildingData?: Building; locationData?: Location } | null;
 }
 
-export default function GoogleMap({ activeFilters, selectedEventId, onEventSelect, onBuildingSelect }: GoogleMapProps) {
+export default function GoogleMap({ activeFilters, selectedEventId, onEventSelect, onBuildingSelect, searchResult }: GoogleMapProps) {
   // Data state
   const [campuses, setCampuses] = useState<{ id: number; name: string }[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
@@ -89,8 +91,28 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
     
     fetchData();
   }, []);
+
+  // Handle search result selection
+  useEffect(() => {
+    if (searchResult) {
+      if (searchResult.type === 'building' && searchResult.buildingData) {
+        // Find the complete building with location
+        const building = buildings.find(b => b.id === searchResult.buildingData?.id);
+        if (building) {
+          setSelectedBuilding(building);
+          setSelectedLocation(null);
+        }
+      } else if (searchResult.type === 'location' && searchResult.locationData) {
+        // Find the complete location with coordinates
+        const location = locations.find(l => l.id === searchResult.locationData?.id);
+        if (location) {
+          setSelectedLocation(location);
+          setSelectedBuilding(null);
+        }
+      }
+    }
+  }, [searchResult, buildings, locations]);
   
-  // Fetch data from API endpoints
 
   // Handle getting directions - attempts to use user's current location
   const handleGetDirections = (destination: { lat: number; lng: number }, name: string) => {
@@ -172,6 +194,7 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
         gestureHandling="greedy"
       >
         <MapController />
+        <SearchPanner searchResult={searchResult || null} />
         
         <RouteCalculator
           origin={routeOrigin}
