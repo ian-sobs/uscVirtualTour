@@ -65,8 +65,7 @@ export const campuses = pgTable("campuses", {
     index("campus_name_idx").on(table.name)
 ]);
 
-
-export const categoryEnum = pgEnum('category', ['buildings', 'events', 'food', 'facilities', 'transport_parking', 'study_areas', 'dorms_residences', 'sports_recreation']);
+export const categoryEnum = pgEnum('category', ['buildings', 'food', 'facilities', 'transport_parking', 'study_areas', 'dorms_residences', 'sports_recreation']);
 
 export const locations = pgTable("locations", {
     id: serial().primaryKey(),
