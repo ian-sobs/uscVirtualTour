@@ -52,10 +52,7 @@ export async function requireAdmin(request: NextRequest) {
 
 
 export const getUserRole = (userObj: authUser): UserRole => {
-  if(!userObj.is_admin && !userObj.is_student){
-    return 'guest'
-  }
-  else if(userObj.is_student){
+  if(userObj.is_student){
     return 'student'
   }
   else {

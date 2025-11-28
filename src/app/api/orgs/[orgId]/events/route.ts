@@ -11,16 +11,7 @@ export async function GET(
     request: NextRequest, 
     { params }: { params: Promise<{ orgId: string }> }) {
 
-    try {
-        const session = await checkAuth(request)
-        if(!session){
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-        const userRole = getUserRole(session.user)
-        
+    try {        
         const { orgId } = await params
         const searchParams = request.nextUrl.searchParams
         const dateTimeStart = searchParams.get('dateTimeStart')
@@ -35,10 +26,13 @@ export async function GET(
         if(name) filters.push(ilike(events.name, `${name}%`));
 
         filters.push(eq(events.org_id, parseInt(orgId)));
-        if(userRole === 'guest'){ 
+
+        const session = await checkAuth(request)
+
+        if(!session){ // if this executes, then a guest accessed this endpoint
             filters.push(eq(events.visibility, "everyone"))
         }
-        else if(userRole === 'student'){
+        else if(getUserRole(session.user) === 'student'){
             filters.push(inArray(events.visibility, ["everyone", "only_students"]))
         }
 
