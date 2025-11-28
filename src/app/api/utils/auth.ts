@@ -5,7 +5,8 @@ import { authUser } from "@/types";
 import { UserRole } from '@/types';
 import { db } from '@/index';
 import { user_org_relations } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
+import { string } from 'better-auth';
 
 
 export async function checkAuth(request: NextRequest) {
@@ -71,4 +72,22 @@ export async function getUserOrgs(userObj: authUser) {
   const userOrgs: number[] = []
   userOrgsTemp.map((org) => userOrgs.push(org.org_id))
   return userOrgs;
+}
+
+export async function getUserOrgPermissions(userObj: authUser, orgId: number):Promise<
+{ can_post_events: boolean; can_add_members: boolean; can_remove_members: boolean; can_set_member_permissions: boolean; }>{
+  const userOrgPermissionsTemp = await db.select({
+    can_post_events: user_org_relations.can_post_events,
+    can_add_members: user_org_relations.can_add_members,
+    can_remove_members: user_org_relations.can_remove_members,
+    can_set_member_permissions: user_org_relations.can_set_member_permissions
+  }).from(user_org_relations).where(
+    and(
+      eq(user_org_relations.user_id, userObj.id),
+      eq(user_org_relations.org_id, orgId)
+    )
+  )
+
+  const userOrgPermissions = userOrgPermissionsTemp[0]
+  return userOrgPermissions;
 }
