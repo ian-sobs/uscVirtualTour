@@ -397,6 +397,7 @@ export const schema = {
     event_room_relations,
     event_location_relations,
     event_group_location_relations,
+    geometries,
 
     usersRelations,
     organizationsRelations,
@@ -413,6 +414,7 @@ export const schema = {
     officesRelations,
     roomsRelations,
     eventRoomRelations,
+    geometriesRelations,
 
     sessions, 
     accounts, 

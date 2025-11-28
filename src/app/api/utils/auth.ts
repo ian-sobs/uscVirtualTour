@@ -55,8 +55,11 @@ export const getUserRole = (userObj: authUser): UserRole => {
   if(userObj.is_student){
     return 'student'
   }
-  else {
+  else if(userObj.is_admin){
     return 'admin'
+  }
+  else{
+    return 'guest'
   }
 };
 
