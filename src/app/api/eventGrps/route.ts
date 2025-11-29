@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/index';
-import { event_groups, event_room_relations, event_location_relations } from '@/db/schema';
+import { event_groups, event_group_location_relations, event_location_relations } from '@/db/schema';
 import { getUserRole } from '@/app/api/utils/auth';
 import { eq, SQL, and, ilike, or, inArray, lte, gte } from 'drizzle-orm';
 import { checkAuth } from '@/app/api/utils/auth';
@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
             dateTimeStart: Date | string,
             dateTimeEnd: Date | string | null | undefined,
             customMarker: string | null | undefined
+            locationId: number
         } = await request.json();
 
         const name = body.name;
@@ -75,6 +76,7 @@ export async function POST(request: NextRequest) {
         const date_time_start = new Date(body.dateTimeStart);
         const date_time_end = (body.dateTimeEnd) ? new Date(body.dateTimeEnd) : null;
         const custom_marker = body.customMarker;
+        const locationId = body.locationId;
 
 
         const result = await db.insert(event_groups).values(
@@ -89,7 +91,17 @@ export async function POST(request: NextRequest) {
             insertedId: event_groups.id
         })
 
-        return NextResponse.json({ data: result[0] });
+        const junctionResult = await db.insert(event_group_location_relations).values(
+            {
+                event_group_id: result[0].insertedId,
+                location_id: locationId
+            }
+        ).returning({
+            insertedId: event_group_location_relations.event_group_id,
+            insertedLocationId: event_group_location_relations.location_id
+        })
+
+        return NextResponse.json({ data: junctionResult[0] });
         
     } catch (err) {
         console.error(err);
