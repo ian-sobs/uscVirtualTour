@@ -44,8 +44,58 @@ export async function GET(request: NextRequest) {
 }
 
 
-export async function POST(request: NextRequest, 
-    { params }: { params: Promise<{ orgId: string }> }) {
+export async function POST(request: NextRequest) {
+    try {        
+        const session = await checkAuth(request)
+        
+        if(!session){
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );     
+        }
+        const userRole = getUserRole(session.user)
+        if(userRole != "admin"){
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );                
+        }
+
+        const body: {
+            name: string, 
+            description: string | null | undefined,
+            dateTimeStart: Date | string,
+            dateTimeEnd: Date | string | null | undefined,
+            customMarker: string | null | undefined
+        } = await request.json();
+
+        const name = body.name;
+        const description = body.description;
+        const date_time_start = new Date(body.dateTimeStart);
+        const date_time_end = (body.dateTimeEnd) ? new Date(body.dateTimeEnd) : null;
+        const custom_marker = body.customMarker;
 
 
+        const result = await db.insert(event_groups).values(
+            {
+                name: name,
+                description: description,
+                date_time_start: date_time_start,
+                date_time_end: date_time_end,
+                custom_marker: custom_marker
+            }
+        ).returning({
+            insertedId: event_groups.id
+        })
+
+        return NextResponse.json({ data: result[0] });
+        
+    } catch (err) {
+        console.error(err);
+        return NextResponse.json(
+            { error: "Internal Server Error" },
+            { status: 500 }
+        );
+    }
 }
