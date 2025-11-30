@@ -73,7 +73,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ eventGrpId: string }> }) {
     try {        
         const session = await checkAuth(request)
         
