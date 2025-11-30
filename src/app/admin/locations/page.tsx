@@ -241,7 +241,7 @@ export default function LocationsPage() {
 
       {/* Campus Selector */}
       <div className="flex items-center gap-4">
-        <label className="text-sm font-medium text-gray-900">Select Campus:</label>
+        <label className="text-sm font-semibold text-gray-900">Select Campus:</label>
         <select
           value={selectedCampusId || ''}
           onChange={(e) => setSelectedCampusId(parseInt(e.target.value))}
@@ -283,19 +283,19 @@ export default function LocationsPage() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Category
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Campus
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Description
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -317,7 +317,7 @@ export default function LocationsPage() {
               filteredLocations.map((location) => (
                 <tr key={location.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{location.name}</div>
+                    <div className="text-sm font-semibold text-gray-900">{location.name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryBadgeColor(location.category)}`}>
@@ -335,7 +335,7 @@ export default function LocationsPage() {
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
                     onClick={() => handleEdit(location)}
-                    className="text-green-700 hover:text-green-900 mr-4 cursor-pointer font-bold"
+                    className="text-blue-600 hover:text-blue-900 mr-4 cursor-pointer font-bold"
                   >
                     Edit
                   </button>
@@ -363,7 +363,7 @@ export default function LocationsPage() {
               </h3>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Location Name *
                   </label>
                   <input
@@ -376,7 +376,7 @@ export default function LocationsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Category *
                   </label>
                   <select
@@ -394,7 +394,7 @@ export default function LocationsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Campus
                   </label>
                   <input
@@ -406,7 +406,7 @@ export default function LocationsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Description
                   </label>
                   <textarea
@@ -419,7 +419,7 @@ export default function LocationsPage() {
 
                 {/* Coordinates (manual input or map picker) */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">Coordinates (optional)</label>
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">Coordinates (optional)</label>
                   <div className="flex gap-2 items-center">
                     <input
                       type="text"

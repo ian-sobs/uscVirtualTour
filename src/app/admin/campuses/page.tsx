@@ -175,13 +175,13 @@ export default function CampusesPage() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Address
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -203,7 +203,7 @@ export default function CampusesPage() {
               filteredCampuses.map((campus) => (
                 <tr key={campus.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{campus.name}</div>
+                    <div className="text-sm font-semibold text-gray-900">{campus.name}</div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-gray-900">{campus.address}</div>
@@ -211,7 +211,7 @@ export default function CampusesPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
                       onClick={() => handleEdit(campus)}
-                      className="text-green-700 hover:text-green-900 mr-4 cursor-pointer font-bold"
+                      className="text-blue-600 hover:text-blue-900 mr-4 cursor-pointer font-bold"
                     >
                       Edit
                     </button>
@@ -239,7 +239,7 @@ export default function CampusesPage() {
               </h3>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Campus Name *
                   </label>
                   <input
@@ -248,12 +248,12 @@ export default function CampusesPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
-                    placeholder="e.g., University Park Campus"
+                    placeholder="e.g., Main Campus"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Address *
                   </label>
                   <textarea
@@ -262,7 +262,7 @@ export default function CampusesPage() {
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
-                    placeholder="e.g., Los Angeles, CA 90089"
+                    placeholder="e.g., Nasipit, Talamban, Cebu City, Cebu 6000"
                   />
                 </div>
 

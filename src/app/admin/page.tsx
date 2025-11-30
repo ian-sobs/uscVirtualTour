@@ -33,7 +33,7 @@ export default function AdminDashboard() {
           >
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">{stat.name}</p>
+                <p className="text-sm font-semibold text-gray-900">{stat.name}</p>
                 <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
                 <p className="text-xs text-gray-900 mt-2">{stat.change}</p>
               </div>
@@ -67,7 +67,7 @@ export default function AdminDashboard() {
           <div className="p-4 flex items-start gap-4">
             <span className="text-2xl">🏢</span>
             <div className="flex-1">
-              <p className="text-sm font-medium text-gray-900">New building added</p>
+              <p className="text-sm font-semibold text-gray-900">New building added</p>
               <p className="text-xs text-gray-900 mt-1">Science Building was added to the campus map</p>
               <p className="text-xs text-gray-900 mt-1">2 hours ago</p>
             </div>
@@ -75,7 +75,7 @@ export default function AdminDashboard() {
           <div className="p-4 flex items-start gap-4">
             <span className="text-2xl">📅</span>
             <div className="flex-1">
-              <p className="text-sm font-medium text-gray-900">Event updated</p>
+              <p className="text-sm font-semibold text-gray-900">Event updated</p>
               <p className="text-xs text-gray-900 mt-1">Campus Tour event details were modified</p>
               <p className="text-xs text-gray-900 mt-1">5 hours ago</p>
             </div>
@@ -83,7 +83,7 @@ export default function AdminDashboard() {
           <div className="p-4 flex items-start gap-4">
             <span className="text-2xl">👥</span>
             <div className="flex-1">
-              <p className="text-sm font-medium text-gray-900">New organization registered</p>
+              <p className="text-sm font-semibold text-gray-900">New organization registered</p>
               <p className="text-xs text-gray-900 mt-1">USC Computer Science Club joined the platform</p>
               <p className="text-xs text-gray-900 mt-1">1 day ago</p>
             </div>

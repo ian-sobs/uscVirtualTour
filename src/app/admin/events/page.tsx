@@ -121,22 +121,22 @@ export default function EventsPage() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Event
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Org ID
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Start Time
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 End Time
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Visibility
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -145,7 +145,7 @@ export default function EventsPage() {
             {filteredEvents.map((event) => (
               <tr key={event.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4">
-                  <div className="text-sm font-medium text-gray-900">{event.name}</div>
+                  <div className="text-sm font-semibold text-gray-900">{event.name}</div>
                   <div className="text-xs text-gray-900 truncate max-w-xs">{event.description}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -169,7 +169,7 @@ export default function EventsPage() {
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
                     onClick={() => handleEdit(event)}
-                    className="text-green-700 hover:text-green-900 mr-4 cursor-pointer font-bold"
+                    className="text-blue-600 hover:text-blue-900 mr-4 cursor-pointer font-bold"
                   >
                     Edit
                   </button>
@@ -196,7 +196,7 @@ export default function EventsPage() {
               </h3>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Event Name *
                   </label>
                   <input
@@ -209,7 +209,7 @@ export default function EventsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Description *
                   </label>
                   <textarea
@@ -222,7 +222,7 @@ export default function EventsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Organization ID
                   </label>
                   <input
@@ -235,7 +235,7 @@ export default function EventsPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-1">
+                    <label className="block text-sm font-semibold text-gray-900 mb-1">
                       Start Time *
                     </label>
                     <input
@@ -248,7 +248,7 @@ export default function EventsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-1">
+                    <label className="block text-sm font-semibold text-gray-900 mb-1">
                       End Time
                     </label>
                     <input
@@ -261,7 +261,7 @@ export default function EventsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Visibility *
                   </label>
                   <select
