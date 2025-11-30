@@ -6,6 +6,7 @@ import { eq, SQL, and, ilike, or, inArray, lte, gte } from 'drizzle-orm';
 import { checkAuth } from '@/app/api/utils/auth';
 import { getUserOrgs } from '@/app/api/utils/auth';
 import { getUserOrgPermissions } from '@/app/api/utils/auth';
+import { isNumericString } from '@/app/utils';
 
 // GET /orgs/:orgId/events - Get all events in a given org
 export async function GET(
@@ -65,10 +66,11 @@ export async function POST(request: NextRequest,
 
     try {        
         const session = await checkAuth(request)
-        const {orgId} = await params
+        const paramsPath = await params
 
-        const searchParams = request.nextUrl.searchParams
-        const inLocation:boolean = (searchParams.get('inLocation') === "true") // if true, then the event takes place in a lcoation, otherwise it takes place in a room
+        const orgId = (isNumericString(paramsPath.orgId)) ? parseInt(paramsPath.orgId) : null;
+        //const searchParams = request.nextUrl.searchParams
+        //const inLocation:boolean = (searchParams.get('inLocation') === "true") // if true, then the event takes place in a lcoation, otherwise it takes place in a room
 
         if(!session){
             // code block runs if a guest tried to post an event
@@ -83,15 +85,15 @@ export async function POST(request: NextRequest,
 
         let orgIdTemp: null | number = null;
 
-        if(userRole == "student" && !userOrgs.includes(parseInt(orgId))){
+        if(userRole == "student" && orgId != null && !userOrgs.includes(orgId)){
             // student doesnt even belong to the org, so they are blocked from using this endpoint to post events for their org
             return NextResponse.json(
                 { error: "Unauthorized" },
                 { status: 401 }
             );
         }
-        else if(userRole == "student"){
-            const {can_post_events} = await getUserOrgPermissions(session.user, parseInt(orgId))
+        else if(userRole == "student" && orgId != null){
+            const {can_post_events} = await getUserOrgPermissions(session.user, orgId)
             if(!can_post_events){
                 return NextResponse.json(
                     { error: "Unauthorized" },
@@ -99,7 +101,7 @@ export async function POST(request: NextRequest,
                 );
             }
             else{
-                orgIdTemp = parseInt(orgId)
+                orgIdTemp = orgId
             }
         }
 
@@ -111,8 +113,8 @@ export async function POST(request: NextRequest,
             visibility: "everyone" | "only_students" | "only_organization_members",
             evetGroupId: number | null | undefined,
             customMarker: string | null | undefined,
-            roomId: number | null | undefined,
-            locationId: number | null | undefined
+            // roomId: number | null | undefined,
+            // locationId: number | null | undefined
         } = await request.json();
 
 
@@ -123,17 +125,17 @@ export async function POST(request: NextRequest,
         const visibility = body.visibility;
         const event_group_id = body.evetGroupId;
         const custom_marker = body.customMarker;
-        const roomId = body.roomId;
-        const locationId = body.locationId;
+        // const roomId = body.roomId;
+        // const locationId = body.locationId;
 
-        if (!roomId && !locationId){
-            return NextResponse.json(
-                {
-                    error: "'roomId' and 'locationId' cannot be both null. Provide at least one."
-                },
-                { status: 400 }
-            );
-        }
+        // if (!roomId && !locationId){
+        //     return NextResponse.json(
+        //         {
+        //             error: "'roomId' and 'locationId' cannot be both null. Provide at least one."
+        //         },
+        //         { status: 400 }
+        //     );
+        // }
 
         const eventResult = await db.insert(events).values(
             {
@@ -147,21 +149,21 @@ export async function POST(request: NextRequest,
                 visibility: visibility
             }
         ).returning({ insertedEventId: events.id });
-        const {insertedEventId} = eventResult[0]
+        //const {insertedEventId} = eventResult[0]
 
-        let result;
-        if(inLocation){
-            result = await db.insert(event_location_relations).values({
-                event_id: insertedEventId,
-                location_id: locationId
-            });
-        }
-        else{
-            result = await db.insert(event_room_relations).values({
-                event_id: insertedEventId,
-                room_id: roomId
-            });
-        }
+        // let result;
+        // if(inLocation){
+        //     result = await db.insert(event_location_relations).values({
+        //         event_id: insertedEventId,
+        //         location_id: locationId
+        //     });
+        // }
+        // else{
+        //     result = await db.insert(event_room_relations).values({
+        //         event_id: insertedEventId,
+        //         room_id: roomId
+        //     });
+        // }
 
         return NextResponse.json({ data: eventResult[0] });
         
