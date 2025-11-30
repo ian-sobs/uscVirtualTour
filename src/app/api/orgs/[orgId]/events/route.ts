@@ -104,6 +104,19 @@ export async function POST(request: NextRequest,
                 orgIdTemp = orgId
             }
         }
+       else if(userRole == "student" && orgId == null){
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );            
+        }
+        else if(userRole == "admin" && orgId != null){
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );            
+        }
+ 
 
         const body: {
             name: string, 
