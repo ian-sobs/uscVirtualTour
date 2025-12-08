@@ -112,8 +112,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ campusId: string }> }
 ) {
-  const authError = await requireAdmin(request);
-  if (authError) return authError;
 
   try {
     const { campusId } = await params;
@@ -137,9 +135,9 @@ export async function GET(
       data: result
     });
   } catch (error) {
-    console.error('Error updating campus:', error);
+    console.error('Error getting campuses:', error);
     return NextResponse.json(
-      { error: 'Failed to update campus' },
+      { error: 'Failed to get campuses' },
       { status: 500 }
     );
   }
