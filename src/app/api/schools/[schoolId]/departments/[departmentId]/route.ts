@@ -73,37 +73,27 @@ export async function DELETE(
     const authError = await requireAdmin(request)
     if(authError) return authError
 
-    const { schoolId } = await params;
+    const { schoolId, departmentId } = await params;
     const schoolIdNum = isNumericString(schoolId) ? parseInt(schoolId) : null;
+    const departmentIdNum = isNumericString(departmentId) ? parseInt(departmentId) : null;
 
-    if(schoolIdNum === null){
+    if(schoolIdNum === null || departmentIdNum === null){
         return NextResponse.json(
-            {error: "Invalid school ID"},
+            {error: "Invalid school ID or invalid department ID"},
             {status: 400}
         )
     }
 
-    const schoolsArr = await db
-        .select()
-        .from(schools)
-        .where(eq(schools.id, schoolIdNum))
-
-    if(schoolsArr.length <= 0){
-        return NextResponse.json(
-            {error: 'School of the given school ID does not exist'},
-            {status: 404}
-        )
-    }
-
-    const body = await request.json()
     const result = await db
-        .insert(departments)
-        .values({
-            name: body.name,
-            school_id: body.schoolId
-        })
+        .delete(departments)
+        .where(
+            and(
+                eq(departments.id, departmentIdNum),
+                eq(departments.school_id, schoolIdNum)
+            )
+        )
         .returning({
-            insertedDepartmentId: departments.id
+            deletedDepartmentId: departments.id
         });
  
 
@@ -113,9 +103,9 @@ export async function DELETE(
     });
 
   } catch (error) {
-    console.error('Error inserting department to the given school:', error);
+    console.error('Error deleting department of the given school:', error);
     return NextResponse.json(
-        { error: 'Failed to isnert department to the given school' },
+        { error: 'Failed to delete department of the given school' },
         { status: 500 }
     );
   }
