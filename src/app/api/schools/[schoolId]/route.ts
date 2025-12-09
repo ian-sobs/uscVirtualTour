@@ -64,7 +64,7 @@ export async function PATCH(
 
     if(schoolIdNum === null){
         return NextResponse.json(
-            {error: "Invalid office ID"},
+            {error: "Invalid school ID"},
             {status: 400}
         )
     }
@@ -72,15 +72,13 @@ export async function PATCH(
     const body = await request.json()
 
     const result = await db
-        .update(offices)
+        .update(schools)
         .set({
-            name: body.name,
-            department_id: body.departmentId,
-            school_id: body.schoolId
+            name: body.name
         })
-        .where(eq(offices.id, schoolIdNum))
+        .where(eq(schools.id, schoolIdNum))
         .returning({
-            updatedOfficeId: offices.id
+            updatedSchoolId: schools.id
         });
  
 
@@ -90,9 +88,9 @@ export async function PATCH(
     });
 
   } catch (error) {
-    console.error('Error updating office:', error);
+    console.error('Error updating school:', error);
     return NextResponse.json(
-        { error: 'Failed to update office' },
+        { error: 'Failed to update school' },
         { status: 500 }
     );
   }
