@@ -38,11 +38,18 @@ export async function POST(
 ) {
 
   try {
+    const authError = await requireAdmin(request)
+    if(authError) return authError
+    
+    const body = await request.json()
+
     const result = await db
-        .delete(offices)
-        .where(eq(offices.id, officeIdNum))
+        .insert(schools)
+        .values({
+            name: body.name
+        })
         .returning({
-            deletedOfficeId: offices.id
+            insertedSchoolId: schools.id
         });
  
 
@@ -52,9 +59,9 @@ export async function POST(
     });
 
   } catch (error) {
-    console.error('Error deleting office:', error);
+    console.error('Error inserting the school:', error);
     return NextResponse.json(
-      { error: 'Failed to delete office' },
+      { error: 'Failed to insert the school' },
       { status: 500 }
     );
   }
