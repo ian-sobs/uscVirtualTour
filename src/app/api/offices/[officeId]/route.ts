@@ -47,3 +47,53 @@ export async function DELETE(
     );
   }
 }
+
+
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ officeId: string; }> }
+) {
+
+  try {
+    const authError = await requireAdmin(request)
+    if(authError) return authError
+
+    const { officeId } = await params;
+    const officeIdNum = isNumericString(officeId) ? parseInt(officeId) : null;
+
+    if(officeIdNum === null){
+        return NextResponse.json(
+            {error: "Invalid office ID"},
+            {status: 400}
+        )
+    }
+
+    const body = await request.json()
+
+    const result = await db
+        .update(offices)
+        .set({
+            name: body.name,
+            department_id: body.departmentId,
+            school_id: body.schoolId
+        })
+        .where(eq(offices.id, officeIdNum))
+        .returning({
+            updatedOfficeId: offices.id
+        });
+ 
+
+    return NextResponse.json({
+        success: true,
+        data: result
+    });
+
+  } catch (error) {
+    console.error('Error updating office:', error);
+    return NextResponse.json(
+        { error: 'Failed to update office' },
+        { status: 500 }
+    );
+  }
+}
