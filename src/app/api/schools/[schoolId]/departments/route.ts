@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/index';
-import { departments } from '@/db/schema';
+import { departments, schools } from '@/db/schema';
 import { requireAdmin } from '@/app/api/utils/auth';
 import { eq, and } from 'drizzle-orm';
 import { auth } from '@/lib/auth';
@@ -68,16 +68,27 @@ export async function POST(
         )
     }
 
-    const body = await request.json()
-
-    const result = await db
-        .update(schools)
-        .set({
-            name: body.name
-        })
+    const schoolsArr = await db
+        .select()
+        .from(schools)
         .where(eq(schools.id, schoolIdNum))
+
+    if(schoolsArr.length <= 0){
+        return NextResponse.json(
+            {error: 'School of the given school ID does not exist'},
+            {status: 404}
+        )
+    }
+
+    const body = await request.json()
+    const result = await db
+        .insert(departments)
+        .values({
+            name: body.name,
+            school_id: body.schoolId
+        })
         .returning({
-            updatedSchoolId: schools.id
+            insertedDepartmentId: departments.id
         });
  
 
@@ -87,9 +98,9 @@ export async function POST(
     });
 
   } catch (error) {
-    console.error('Error updating school:', error);
+    console.error('Error inserting department to the given school:', error);
     return NextResponse.json(
-        { error: 'Failed to update school' },
+        { error: 'Failed to isnert department to the given school' },
         { status: 500 }
     );
   }
