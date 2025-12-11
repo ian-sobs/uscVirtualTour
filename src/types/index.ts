@@ -9,6 +9,13 @@ export interface Location {
   coordinates?: { lat: number; lng: number };
 }
 
+export interface FloorData {
+  kmlUrl?: string;
+  embedUrl?: string; 
+  center: { lat: number; lng: number };
+  zoom: number;
+}
+
 export interface Building {
   id: number;
   name: string;
@@ -16,6 +23,9 @@ export interface Building {
   location_id: number;
   floor_count?: number;
   basement_count?: number;
+  floor_data?: {
+    [floor: number]: FloorData;
+  };
 }
 
 export interface Event {

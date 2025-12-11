@@ -9,6 +9,7 @@ const navigation = [
   { name: 'Dashboard', href: '/admin', icon: '📊' },
   { name: 'Campuses', href: '/admin/campuses', icon: '🏫' },
   { name: 'Buildings', href: '/admin/buildings', icon: '🏢' },
+  { name: 'Floor Maps', href: '/admin/floor-maps', icon: '🗺️' },
   { name: 'Locations', href: '/admin/locations', icon: '📍' },
   { name: 'Events', href: '/admin/events', icon: '📅' },
   { name: 'Organizations', href: '/admin/organizations', icon: '👥' },

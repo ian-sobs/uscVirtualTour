@@ -204,7 +204,7 @@ export default function BuildingsPage() {
 
       {/* Campus Selector */}
       <div className="flex items-center gap-4">
-        <label className="text-sm font-medium text-gray-900">Select Campus:</label>
+        <label className="text-sm font-semibold text-gray-900">Select Campus:</label>
         <select
           value={selectedCampusId || ''}
           onChange={(e) => setSelectedCampusId(parseInt(e.target.value))}
@@ -234,19 +234,19 @@ export default function BuildingsPage() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Campus
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Floors
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Basements
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-900 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -268,7 +268,7 @@ export default function BuildingsPage() {
               filteredBuildings.map((building) => (
                 <tr key={building.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{building.name}</div>
+                    <div className="text-sm font-semibold text-gray-900">{building.name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{campuses.find(c => c.id === building.campus_id)?.name || 'Unknown'}</div>
@@ -282,7 +282,7 @@ export default function BuildingsPage() {
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
                     onClick={() => handleEdit(building)}
-                    className="text-green-700 hover:text-green-900 mr-4 cursor-pointer font-bold"
+                    className="text-blue-600 hover:text-blue-900 mr-4 cursor-pointer font-bold"
                   >
                     Edit
                   </button>
@@ -310,7 +310,7 @@ export default function BuildingsPage() {
               </h3>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Building Name *
                   </label>
                   <input
@@ -323,7 +323,7 @@ export default function BuildingsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Campus
                   </label>
                   <input
@@ -335,7 +335,7 @@ export default function BuildingsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Location (optional)
                   </label>
                   <select
@@ -360,7 +360,7 @@ export default function BuildingsPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-1">
+                    <label className="block text-sm font-semibold text-gray-900 mb-1">
                       Floor Count
                     </label>
                     <input
@@ -373,7 +373,7 @@ export default function BuildingsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-1">
+                    <label className="block text-sm font-semibold text-gray-900 mb-1">
                       Basement Count
                     </label>
                     <input
