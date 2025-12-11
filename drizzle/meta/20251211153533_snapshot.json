@@ -1,6 +1,6 @@
 {
-  "id": "dde94ef5-ddf1-443b-aad9-2183eb4fb0fb",
-  "prevId": "9ca5f89b-3391-42ee-bac5-ade7dc07b659",
+  "id": "bc3593e5-a81a-45a5-95eb-41d2ab68fad0",
+  "prevId": "dde94ef5-ddf1-443b-aad9-2183eb4fb0fb",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -917,6 +917,47 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.geometries": {
+      "name": "geometries",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "polygon": {
+          "name": "polygon",
+          "type": "geometry(point)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "polygon_idx": {
+          "name": "polygon_idx",
+          "columns": [
+            {
+              "expression": "polygon",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gist",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.locations": {
       "name": "locations",
       "schema": "",
@@ -1129,6 +1170,18 @@
           "primaryKey": true,
           "notNull": true
         },
+        "name": {
+          "name": "name",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "logo": {
           "name": "logo",
           "type": "text",
@@ -1187,6 +1240,12 @@
         },
         "office_id": {
           "name": "office_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "geometry_id": {
+          "name": "geometry_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -1262,6 +1321,19 @@
           "tableTo": "offices",
           "columnsFrom": [
             "office_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "rooms_geometry_id_geometries_id_fk": {
+          "name": "rooms_geometry_id_geometries_id_fk",
+          "tableFrom": "rooms",
+          "tableTo": "geometries",
+          "columnsFrom": [
+            "geometry_id"
           ],
           "columnsTo": [
             "id"
@@ -1438,13 +1510,13 @@
           "name": "user_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "org_id": {
           "name": "org_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "can_post_events": {
           "name": "can_post_events",
@@ -1462,6 +1534,13 @@
         },
         "can_remove_members": {
           "name": "can_remove_members",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "can_set_member_permissions": {
+          "name": "can_set_member_permissions",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,
