@@ -7,6 +7,13 @@ export interface Location {
   latitude?: string;
   longitude?: string;
   coordinates?: { lat: number; lng: number };
+  operating_hours?: string | null;
+  contact_number?: string | null;
+  email?: string | null;
+  website_url?: string | null;
+  images?: string[] | null;
+  amenities?: string[] | null;
+  tags?: string[] | null;
 }
 
 export interface FloorData {
@@ -26,6 +33,10 @@ export interface Building {
   floor_data?: {
     [floor: number]: FloorData;
   };
+  total_rooms?: number | null;
+  facilities?: string[] | null;
+  accessibility_features?: string[] | null;
+  fun_facts?: string[] | null;
 }
 
 export interface Event {
