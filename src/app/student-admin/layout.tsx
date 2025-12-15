@@ -5,20 +5,14 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
 import Image from 'next/image';
-import { dashboardIcon, campusIcon, buildingIcon, floorMapIcon, locationIcon, eventsIcon, organizationsIcon, userIcon } from '@/app/lib/icons';
+import { eventsIcon, organizationsIcon } from '@/app/lib/icons';
 
 const navigation = [
-  { name: 'Dashboard', href: '/admin', icon: dashboardIcon },
-  { name: 'Campuses', href: '/admin/campuses', icon: campusIcon },
-  { name: 'Buildings', href: '/admin/buildings', icon: buildingIcon },
-  { name: 'Floor Maps', href: '/admin/floor-maps', icon: floorMapIcon },
-  { name: 'Locations', href: '/admin/locations', icon: locationIcon },
-  { name: 'Events', href: '/admin/events', icon: eventsIcon },
-  { name: 'Organizations', href: '/admin/organizations', icon: organizationsIcon },
-  { name: 'Users', href: '/admin/users', icon: userIcon },
+  { name: 'Events', href: '/student-admin/events', icon: eventsIcon },
+  { name: 'Organizations', href: '/student-admin/organizations', icon: organizationsIcon },
 ];
 
-export default function AdminLayout({
+export default function StudentAdminLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -33,12 +27,18 @@ export default function AdminLayout({
     const checkAuth = async () => {
       try {
         const { data } = await authClient.getSession();
-        console.log('Admin check - session data:', data); // Debug log
+        console.log('Student admin check - session data:', data); // Debug log
         const user = data?.user || data;
-        if (!user?.is_admin) {
-          // Not an admin, redirect to home
-          console.log('User is not admin, redirecting...');
-          router.push('/');
+        if (!user) {
+          // Not logged in, redirect to signin
+          console.log('User not logged in, redirecting...');
+          router.push('/signin');
+          return;
+        }
+        if (user?.is_admin) {
+          // Admins should use admin panel, not student portal
+          console.log('Admin user, redirecting to admin panel...');
+          router.push('/admin');
           return;
         }
         setSession(data);
@@ -74,12 +74,12 @@ export default function AdminLayout({
   }
 
   const user = session?.user || session;
-  if (!user?.is_admin) {
+  if (!user) {
     return null; // Will redirect in useEffect
   }
 
   const isActive = (href: string) => {
-    if (href === '/admin') {
+    if (href === '/student-admin') {
       return pathname === href;
     }
     return pathname?.startsWith(href);
@@ -99,7 +99,7 @@ export default function AdminLayout({
                 <span className="text-xl sm:text-2xl">{sidebarOpen ? '☰' : '☰'}</span>
               </button>
               <h1 className="ml-2 sm:ml-4 text-sm sm:text-xl font-bold text-gray-900 truncate">
-                USC-VT Admin Panel
+                USC-VT Student Portal
               </h1>
             </div>
             
@@ -136,7 +136,7 @@ export default function AdminLayout({
         <aside
           className={`${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          } fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 transition-transform duration-300 overflow-y-auto`}
+          } fixed left-0 z-30 w-64 bg-white border-r border-gray-200 transition-transform duration-300 overflow-y-auto`}
         >
           <nav className="p-3 sm:p-4 space-y-1 sm:space-y-2 mt-14 sm:mt-0">
             {navigation.map((item) => {

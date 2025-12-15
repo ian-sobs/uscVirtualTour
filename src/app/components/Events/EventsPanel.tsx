@@ -33,15 +33,15 @@ export default function EventsPanel({ events = [], onEventClick }: EventsPanelPr
   };
 
   return (
-    <aside className={`absolute right-4 top-25 bg-white rounded-lg shadow-lg w-80 z-25 transition-all duration-300 ${
-      isExpanded ? 'max-h-[calc(100vh-120px)]' : 'max-h-14'
+    <aside className={`absolute right-2 sm:right-4 top-32 sm:bottom-20 sm:top-auto md:bottom-125 bg-white rounded-lg shadow-lg w-64 sm:w-80 z-10 transition-all duration-300 ${
+      isExpanded ? 'max-h-[calc(100vh-120px)] sm:max-h-96' : 'max-h-12 sm:max-h-14'
     }`}>
       <div 
-        className="p-4 cursor-pointer flex justify-between items-center bg-gray-200 hover:bg-gray-300 transition-colors rounded-lg"
+        className="p-2 sm:p-4 cursor-pointer flex justify-between items-center bg-gray-200 hover:bg-gray-300 transition-colors rounded-lg"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <h2 className="font-bold text-lg text-gray-800">Campus Events</h2>
-        <button className="text-gray-500 hover:text-gray-700 text-xl transition-transform duration-300" style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+        <h2 className="font-bold text-sm sm:text-lg text-gray-800">Campus Events</h2>
+        <button className="text-gray-500 hover:text-gray-700 text-lg sm:text-xl transition-transform duration-300" style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>
           ▼
         </button>
       </div>
