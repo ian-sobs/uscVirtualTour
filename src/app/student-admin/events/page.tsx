@@ -1,34 +1,27 @@
 'use client';
 
 import { useState } from 'react';
-// import AdminMapPicker from '@/app/components/Map/AdminMapPicker';
 import { Event } from '@/types';
 
-export default function EventsPage() {
+export default function StudentEventsPage() {
+  // Mock data - organizations this student is a member of
+  const [studentOrganizations] = useState([
+    { id: 1, name: 'Supreme Student Council' },
+    { id: 2, name: 'Computer Science Society' },
+    { id: 3, name: 'Carolinian Dance Troupe' },
+  ]);
+
   const [events, setEvents] = useState<Event[]>([
     {
       id: 1,
-      name: 'Campus Tour',
-      description: 'Guided tour of the main campus',
-      date_time_start: '2024-12-01T10:00',
-      date_time_end: '2024-12-01T12:00',
+      name: 'Student Council Meeting',
+      description: 'Monthly student council meeting',
+      date_time_start: '2024-12-15T14:00',
+      date_time_end: '2024-12-15T16:00',
       org_id: 1,
-      visibility: 'everyone',
+      visibility: 'only_students',
     },
   ]);
-  
-  // Mock organizations data - in real app, fetch from API
-  const [organizations] = useState([
-    { id: 1, name: 'USC Alumni Association', is_student_org: false },
-    { id: 2, name: 'USC Administration', is_student_org: false },
-    { id: 3, name: 'Supreme Student Council', is_student_org: true }, // Should not appear
-    { id: 4, name: 'Athletics Department', is_student_org: false },
-    { id: 5, name: 'Computer Science Society', is_student_org: true }, // Should not appear
-  ]);
-  
-  // Filter to only non-student organizations
-  const adminOrganizations = organizations.filter(org => !org.is_student_org);
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [formData, setFormData] = useState({
@@ -37,9 +30,8 @@ export default function EventsPage() {
     date_time_start: '',
     date_time_end: '',
     custom_marker: '',
-    event_group_id: 0,
     org_id: 0,
-    visibility: 'everyone' as 'everyone' | 'only_students' | 'only_organization_members',
+    visibility: 'only_students' as 'everyone' | 'only_students' | 'only_organization_members',
   });
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -51,9 +43,8 @@ export default function EventsPage() {
       date_time_start: '',
       date_time_end: '',
       custom_marker: '',
-      event_group_id: 0,
       org_id: 0,
-      visibility: 'everyone',
+      visibility: 'only_students',
     });
     setIsModalOpen(true);
   };
@@ -66,9 +57,8 @@ export default function EventsPage() {
       date_time_start: event.date_time_start,
       date_time_end: event.date_time_end || '',
       custom_marker: event.custom_marker || '',
-      event_group_id: event.event_group_id || 0,
       org_id: event.org_id || 0,
-      visibility: event.visibility || 'everyone',
+      visibility: event.visibility || 'only_students',
     });
     setIsModalOpen(true);
   };
@@ -108,7 +98,7 @@ export default function EventsPage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Events</h2>
-          <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-900">Manage campus events</p>
+          <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-900">Manage your organization events</p>
         </div>
         <button
           onClick={handleAdd}
@@ -159,11 +149,11 @@ export default function EventsPage() {
               <tr key={event.id} className="hover:bg-gray-50">
                 <td className="px-3 sm:px-6 py-3 sm:py-4">
                   <div className="text-xs sm:text-sm font-semibold text-gray-900">{event.name}</div>
-                  <div className="text-xs text-gray-900 truncate max-w-xs">{event.description}</div>
+                  <div className="text-xs text-gray-600 truncate max-w-xs">{event.description}</div>
                 </td>
                 <td className="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                   <div className="text-xs sm:text-sm text-gray-900">
-                    {adminOrganizations.find(org => org.id === event.org_id)?.name || 'No Organization'}
+                    {studentOrganizations.find(org => org.id === event.org_id)?.name || 'No Organization'}
                   </div>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
@@ -239,22 +229,23 @@ export default function EventsPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-1">
-                    Organization
+                    Organization *
                   </label>
                   <select
+                    required
                     value={formData.org_id}
-                    onChange={(e) => setFormData({ ...formData, org_id: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => setFormData({ ...formData, org_id: parseInt(e.target.value) })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black cursor-pointer"
                   >
-                    <option value={0}>No Organization</option>
-                    {adminOrganizations.map(org => (
+                    <option value={0}>Select organization</option>
+                    {studentOrganizations.map((org) => (
                       <option key={org.id} value={org.id}>
                         {org.name}
                       </option>
                     ))}
                   </select>
                   <p className="text-xs text-gray-500 mt-1">
-                    Only non-student organizations are available for admin posting
+                    Choose which organization is hosting this event
                   </p>
                 </div>
 
@@ -287,17 +278,16 @@ export default function EventsPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-1">
-                    Visibility *
+                    Visibility
                   </label>
                   <select
-                    required
                     value={formData.visibility}
                     onChange={(e) => setFormData({ ...formData, visibility: e.target.value as any })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black cursor-pointer"
                   >
                     <option value="everyone">Everyone</option>
-                    <option value="only_students">Only Students</option>
-                    <option value="only_organization_members">Only Organization Members</option>
+                    <option value="only_students">Students Only</option>
+                    <option value="only_organization_members">Organization Members Only</option>
                   </select>
                 </div>
 

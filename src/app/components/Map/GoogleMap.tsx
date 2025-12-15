@@ -19,9 +19,11 @@ interface GoogleMapProps {
   onEventSelect?: (eventId: number | null) => void;
   onBuildingSelect?: (building: Building | null) => void;
   searchResult?: { coordinates: { lat: number; lng: number }; type: 'building' | 'location'; buildingData?: Building; locationData?: Location } | null;
+  mapType?: string;
+  onClearSearchResult?: () => void;
 }
 
-export default function GoogleMap({ activeFilters, selectedEventId, onEventSelect, onBuildingSelect, searchResult }: GoogleMapProps) {
+export default function GoogleMap({ activeFilters, selectedEventId, onEventSelect, onBuildingSelect, searchResult, mapType = 'roadmap', onClearSearchResult }: GoogleMapProps) {
   // Data state
   const [campuses, setCampuses] = useState<{ id: number; name: string }[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
@@ -116,6 +118,10 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
 
   // Handle getting directions - attempts to use user's current location
   const handleGetDirections = (destination: { lat: number; lng: number }, name: string) => {
+    // Close info cards when getting directions
+    setSelectedLocation(null);
+    setSelectedBuilding(null);
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -192,6 +198,7 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
         className="w-full h-full"
         disableDefaultUI={true}
         gestureHandling="greedy"
+        mapTypeId={mapType}
       >
         <MapController />
         <SearchPanner searchResult={searchResult || null} />
@@ -214,6 +221,7 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
               key={`location-${location.id}`}
               location={location}
               onClick={handleLocationClick}
+              isHighlighted={searchResult?.type === 'location' && searchResult?.locationData?.id === location.id}
             />
           );
         })}
@@ -229,6 +237,7 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
               building={building}
               location={location}
               onClick={handleBuildingClick}
+              isHighlighted={searchResult?.type === 'building' && searchResult?.buildingData?.id === building.id}
             />
           );
         })}
@@ -245,7 +254,10 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
       {selectedLocation && selectedLocation.coordinates && (
         <LocationInfoCard
           location={selectedLocation}
-          onClose={() => setSelectedLocation(null)}
+          onClose={() => {
+            setSelectedLocation(null);
+            onClearSearchResult?.();
+          }}
           onGetDirections={handleGetDirections}
         />
       )}
@@ -257,9 +269,20 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
         
         return (
           <BuildingInfoCard
-            building={{ ...selectedBuilding, coordinates: location.coordinates, description: location.description }}
+            building={{
+              ...selectedBuilding,
+              coordinates: location.coordinates,
+              description: location.description,
+              operating_hours: location.operating_hours,
+              contact_number: location.contact_number,
+              email: location.email,
+              website_url: location.website_url,
+              amenities: location.amenities,
+              tags: location.tags
+            }}
             onClose={() => {
               setSelectedBuilding(null);
+              onClearSearchResult?.();
             }}
             onGetDirections={handleGetDirections}
             onViewDetails={handleViewBuildingDetails}

@@ -1,6 +1,7 @@
 // Logo and branding
 export { default as uscLogo } from '@/../public/usc-logo.webp';
 export { default as profileIcon } from '@/../public/profile.svg';
+export { default as studentIcon } from '@/../public/student.svg';
 
 // Category icons (if you have them)
 export { default as buildingIcon } from '@/../public/icons/building.svg';

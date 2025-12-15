@@ -28,6 +28,13 @@ export default function LocationsPage() {
     description: '',
     campus_id: 0,
     coordinates: null as { lat: number; lng: number } | null,
+    operating_hours: '',
+    contact_number: '',
+    email: '',
+    website_url: '',
+    images: [] as string[],
+    amenities: [] as string[],
+    tags: [] as string[],
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState<Location['category'] | 'all'>('all');
@@ -83,7 +90,14 @@ export default function LocationsPage() {
       category: 'buildings', 
       description: '', 
       campus_id: selectedCampusId || 0, 
-      coordinates: null 
+      coordinates: null,
+      operating_hours: '',
+      contact_number: '',
+      email: '',
+      website_url: '',
+      images: [],
+      amenities: [],
+      tags: [],
     });
     setLatInput('');
     setLngInput('');
@@ -109,6 +123,13 @@ export default function LocationsPage() {
       description: location.description || '',
       campus_id: location.campus_id,
       coordinates: coordinates,
+      operating_hours: location.operating_hours || '',
+      contact_number: location.contact_number || '',
+      email: location.email || '',
+      website_url: location.website_url || '',
+      images: location.images || [],
+      amenities: location.amenities || [],
+      tags: location.tags || [],
     });
     setLatInput(coordinates?.lat ? String(coordinates.lat) : '');
     setLngInput(coordinates?.lng ? String(coordinates.lng) : '');
@@ -149,6 +170,13 @@ export default function LocationsPage() {
         description: formData.description,
         latitude: formData.coordinates?.lat.toString() || null,
         longitude: formData.coordinates?.lng.toString() || null,
+        operating_hours: formData.operating_hours || null,
+        contact_number: formData.contact_number || null,
+        email: formData.email || null,
+        website_url: formData.website_url || null,
+        images: formData.images.length > 0 ? formData.images : null,
+        amenities: formData.amenities.length > 0 ? formData.amenities : null,
+        tags: formData.tags.length > 0 ? formData.tags : null,
       };
       
       if (editingLocation) {
@@ -225,27 +253,27 @@ export default function LocationsPage() {
           onClose={() => setToast(null)}
         />
       )}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">Locations</h2>
-          <p className="mt-2 text-gray-900">Manage campus locations</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Locations</h2>
+          <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-900">Manage campus locations</p>
         </div>
         <button
           onClick={handleAdd}
           disabled={!selectedCampusId}
-          className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-green-700 text-white rounded-lg hover:bg-green-800 font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
         >
           + Add Location
         </button>
       </div>
 
       {/* Campus Selector */}
-      <div className="flex items-center gap-4">
-        <label className="text-sm font-semibold text-gray-900">Select Campus:</label>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+        <label className="text-xs sm:text-sm font-semibold text-gray-900">Select Campus:</label>
         <select
           value={selectedCampusId || ''}
           onChange={(e) => setSelectedCampusId(parseInt(e.target.value))}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black cursor-pointer"
+          className="w-full sm:w-auto px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black cursor-pointer"
         >
           {campuses.map((campus) => (
             <option key={campus.id} value={campus.id}>
@@ -256,18 +284,18 @@ export default function LocationsPage() {
       </div>
 
       {/* Search and Filter */}
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <input
           type="text"
           placeholder="Search locations..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
+          className="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
         />
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value as Location['category'] | 'all')}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black cursor-pointer"
+          className="px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black cursor-pointer"
         >
           <option value="all">All Categories</option>
           {categories.map((cat) => (
@@ -279,23 +307,23 @@ export default function LocationsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
+              <th className="px-3 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
+              <th className="px-3 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Category
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
+              <th className="px-3 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider hidden sm:table-cell">
                 Campus
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
+              <th className="px-3 sm:px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider hidden md:table-cell">
                 Description
               </th>
-              <th className="px-6 py-3 text-right text-xs font-semibold text-gray-900 uppercase tracking-wider">
+              <th className="px-3 sm:px-6 py-3 text-right text-xs font-semibold text-gray-900 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -316,26 +344,26 @@ export default function LocationsPage() {
             ) : (
               filteredLocations.map((location) => (
                 <tr key={location.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-semibold text-gray-900">{location.name}</div>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                    <div className="text-xs sm:text-sm font-semibold text-gray-900">{location.name}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryBadgeColor(location.category)}`}>
                       {categories.find((c) => c.value === location.category)?.label}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{campuses.find(c => c.id === location.campus_id)?.name || 'Unknown'}</div>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap hidden sm:table-cell">
+                    <div className="text-xs sm:text-sm text-gray-900">{campuses.find(c => c.id === location.campus_id)?.name || 'Unknown'}</div>
                   </td>
-                <td className="px-6 py-4">
-                  <div className="text-sm text-gray-900 truncate max-w-xs">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 hidden md:table-cell">
+                  <div className="text-xs sm:text-sm text-gray-900 truncate max-w-xs">
                     {location.description || 'No description'}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium">
                   <button
                     onClick={() => handleEdit(location)}
-                    className="text-blue-600 hover:text-blue-900 mr-4 cursor-pointer font-bold"
+                    className="text-blue-600 hover:text-blue-900 mr-2 sm:mr-4 cursor-pointer font-bold"
                   >
                     Edit
                   </button>
@@ -343,7 +371,7 @@ export default function LocationsPage() {
                     onClick={() => handleDelete(location.id)}
                     className="text-red-600 hover:text-red-900 cursor-pointer font-bold"
                   >
-                    Delete
+                    Del
                   </button>
                 </td>
               </tr>
@@ -355,15 +383,15 @@ export default function LocationsPage() {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
                 {editingLocation ? 'Edit Location' : 'Add Location'}
               </h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-1">
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-1">
                     Location Name *
                   </label>
                   <input
@@ -371,19 +399,19 @@ export default function LocationsPage() {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
+                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-1">
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-1">
                     Category *
                   </label>
                   <select
                     required
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value as Location['category'] })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
+                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black text-sm"
                   >
                     {categories.map((cat) => (
                       <option key={cat.value} value={cat.value}>
@@ -413,6 +441,98 @@ export default function LocationsPage() {
                     rows={3}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
+                    Operating Hours
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.operating_hours}
+                    onChange={(e) => setFormData({ ...formData, operating_hours: e.target.value })}
+                    placeholder="e.g., Mon-Fri: 8AM-5PM"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div>
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-1">
+                      Contact Number
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.contact_number}
+                      onChange={(e) => setFormData({ ...formData, contact_number: e.target.value })}
+                      placeholder="+63 32 123 4567"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-1">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="location@usc.edu.ph"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
+                    Website URL
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.website_url}
+                    onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
+                    placeholder="https://example.com"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
+                    Image URLs (one per line)
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={formData.images.join('\n')}
+                    onChange={(e) => setFormData({ ...formData, images: e.target.value.split('\n').filter(url => url.trim()) })}
+                    placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black font-mono text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
+                    Amenities (comma-separated)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.amenities.join(', ')}
+                    onChange={(e) => setFormData({ ...formData, amenities: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
+                    placeholder="WiFi, Air Conditioning, Wheelchair Accessible"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
+                    Tags (comma-separated)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.tags.join(', ')}
+                    onChange={(e) => setFormData({ ...formData, tags: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
+                    placeholder="Popular, Student Favorite, New"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
                   />
                 </div>
@@ -484,17 +604,17 @@ export default function LocationsPage() {
                   )}
                 </div>
 
-                <div className="flex gap-3 pt-4">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-3 sm:pt-4">
                   <button
                     type="submit"
-                    className="flex-1 px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 font-bold cursor-pointer"
+                    className="flex-1 px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 font-bold cursor-pointer text-sm sm:text-base"
                   >
                     {editingLocation ? 'Update' : 'Create'}
                   </button>
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 px-4 py-2 border-2 border-green-700 text-green-700 rounded-lg hover:bg-green-50 font-bold cursor-pointer"
+                    className="flex-1 px-4 py-2 border-2 border-green-700 text-green-700 rounded-lg hover:bg-green-50 font-bold cursor-pointer text-sm sm:text-base"
                   >
                     Cancel
                   </button>
