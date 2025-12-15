@@ -116,6 +116,10 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
 
   // Handle getting directions - attempts to use user's current location
   const handleGetDirections = (destination: { lat: number; lng: number }, name: string) => {
+    // Close info cards when getting directions
+    setSelectedLocation(null);
+    setSelectedBuilding(null);
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
