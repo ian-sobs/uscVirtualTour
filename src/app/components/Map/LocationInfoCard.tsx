@@ -32,9 +32,9 @@ export default function LocationInfoCard({ location, onClose, onGetDirections }:
   const categoryColors = location.category ? getCategoryColor(location.category) : { bg: 'bg-gray-600', text: 'text-gray-600', border: 'border-gray-600' };
 
   return (
-    <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl w-[calc(100vw-2rem)] max-w-sm sm:w-80 z-10 overflow-hidden border border-gray-200">
+    <div className="fixed right-2 sm:right-4 top-20 bg-white rounded-lg shadow-2xl w-[calc(100vw-1rem)] sm:w-96 max-w-md z-20 overflow-hidden border border-gray-200 max-h-[calc(100vh-6rem)] flex flex-col">
       {/* Header with category color */}
-      <div className={`${categoryColors.bg} text-white px-3 sm:px-4 py-2 sm:py-3`}>
+      <div className={`${categoryColors.bg} text-white px-3 sm:px-4 py-2 sm:py-3 flex-shrink-0`}>
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0 pr-2">
             <h3 className="text-base sm:text-lg font-bold truncate">{location.name}</h3>
@@ -55,7 +55,7 @@ export default function LocationInfoCard({ location, onClose, onGetDirections }:
       </div>
 
       {/* Content */}
-      <div className="p-3 sm:p-4 space-y-2 sm:space-y-3 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto">
+      <div className="p-3 sm:p-4 space-y-2 sm:space-y-3 overflow-y-auto flex-1">
         {location.description && (
           <p className="text-sm text-gray-700">{location.description}</p>
         )}

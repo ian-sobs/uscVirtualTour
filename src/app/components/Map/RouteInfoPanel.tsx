@@ -13,7 +13,7 @@ export default function RouteInfoPanel({ route, destinationName, onClose }: Rout
   if (!leg) return null;
 
   return (
-    <div className="absolute bottom-14 sm:bottom-4 left-2 sm:left-4 bg-white rounded-lg shadow-2xl w-[calc(100vw-5rem)] max-w-xs sm:max-w-sm sm:w-80 z-10 overflow-hidden border border-gray-200">
+    <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl w-[calc(100vw-2rem)] max-w-sm sm:w-80 z-10 overflow-hidden border border-gray-200">
       {/* Header with green theme for directions */}
       <div className="bg-green-700 text-white px-2 sm:px-4 py-1.5 sm:py-3">
         <div className="flex items-start justify-between gap-2">

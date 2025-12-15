@@ -156,13 +156,11 @@ export default function Home() {
 		setShowSearchResults(false);
 		setSearchQuery(result.name);
 		
-		// Set the selected result to pan map and show info
+		// Set the selected result to pan map and show info card (right side)
 		setSelectedSearchResult(result);
 
-		// If it's a building, open the building panel
-		if (result.type === 'building' && result.buildingData) {
-			setSelectedBuilding(result.buildingData);
-		}
+		// Don't open the building panel automatically - let BuildingInfoCard handle it
+		// The BuildingInfoCard has a "View Details" button that will open the panel
 	};
 
 	// Close search results when clicking outside
