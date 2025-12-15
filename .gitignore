@@ -44,6 +44,6 @@ next-env.d.ts
 
 
 # seed related
-/init_db/BUNZEL/floor_1/make_room_json.py
+make_room_json.py
 make_node_json.py
 make_edges_json.py
