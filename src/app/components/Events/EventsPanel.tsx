@@ -33,7 +33,7 @@ export default function EventsPanel({ events = [], onEventClick }: EventsPanelPr
   };
 
   return (
-    <aside className={`absolute left-2 sm:right-4 sm:left-auto top-24 sm:bottom-155 sm:top-auto bg-white rounded-lg shadow-lg w-64 sm:w-80 z-10 transition-all duration-300 ${
+    <aside className={`absolute right-2 sm:right-4 top-32 sm:bottom-20 sm:top-auto md:bottom-125 bg-white rounded-lg shadow-lg w-64 sm:w-80 z-10 transition-all duration-300 ${
       isExpanded ? 'max-h-[calc(100vh-120px)] sm:max-h-96' : 'max-h-12 sm:max-h-14'
     }`}>
       <div 

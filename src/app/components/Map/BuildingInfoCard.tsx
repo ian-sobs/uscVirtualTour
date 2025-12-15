@@ -26,7 +26,14 @@ export default function BuildingInfoCard({ building, onClose, onGetDirections, o
   };
 
   return (
-    <div className="fixed right-2 sm:right-4 top-20 bg-white rounded-lg shadow-2xl w-[calc(100vw-1rem)] sm:w-96 max-w-md z-20 overflow-hidden border border-gray-200 max-h-[calc(100vh-6rem)] flex flex-col">
+    <>
+      {/* Backdrop blur overlay - only visible on mobile */}
+      <div 
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 sm:hidden"
+        onClick={onClose}
+      />
+      
+      <div className="fixed inset-x-2 top-16 max-h-[calc(100vh-5rem)] sm:right-4 sm:left-auto sm:top-20 sm:inset-y-auto bg-white rounded-lg shadow-2xl sm:w-96 sm:max-w-md z-50 overflow-hidden border border-gray-200 sm:max-h-[calc(100vh-6rem)] flex flex-col">
       {/* Header with solid red matching building marker */}
       <div className="bg-red-900 text-white px-3 sm:px-4 py-2 sm:py-3 flex-shrink-0">
         <div className="flex items-start justify-between">
@@ -135,5 +142,6 @@ export default function BuildingInfoCard({ building, onClose, onGetDirections, o
         </div>
       </div>
     </div>
+    </>
   );
 }
