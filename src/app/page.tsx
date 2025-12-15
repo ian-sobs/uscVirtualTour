@@ -44,6 +44,7 @@ export default function Home() {
 	const [allLocations, setAllLocations] = useState<Location[]>([]);
 	const [allBuildings, setAllBuildings] = useState<Building[]>([]);
 	const [selectedSearchResult, setSelectedSearchResult] = useState<SearchResult | null>(null);
+	const [mapType, setMapType] = useState<string>('roadmap');
 
 	// Fetch all locations and buildings for search
 	useEffect(() => {
@@ -228,7 +229,7 @@ export default function Home() {
 						</div>
 					)}
 				</div>
-				<ProfileMenu />
+				<ProfileMenu mapType={mapType} onMapTypeChange={setMapType} />
 			</header>
 			<main className="flex-1 relative">
 				<GoogleMap
@@ -237,6 +238,7 @@ export default function Home() {
 					onEventSelect={setSelectedEventId}
 					onBuildingSelect={setSelectedBuilding}
 					searchResult={selectedSearchResult}
+					mapType={mapType}
 				/>
 				<Sidebar onFilterChange={setActiveFilters} />
 				{activeFilters.events && (

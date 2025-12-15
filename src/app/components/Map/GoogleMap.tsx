@@ -19,9 +19,10 @@ interface GoogleMapProps {
   onEventSelect?: (eventId: number | null) => void;
   onBuildingSelect?: (building: Building | null) => void;
   searchResult?: { coordinates: { lat: number; lng: number }; type: 'building' | 'location'; buildingData?: Building; locationData?: Location } | null;
+  mapType?: string;
 }
 
-export default function GoogleMap({ activeFilters, selectedEventId, onEventSelect, onBuildingSelect, searchResult }: GoogleMapProps) {
+export default function GoogleMap({ activeFilters, selectedEventId, onEventSelect, onBuildingSelect, searchResult, mapType = 'roadmap' }: GoogleMapProps) {
   // Data state
   const [campuses, setCampuses] = useState<{ id: number; name: string }[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
@@ -196,6 +197,7 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
         className="w-full h-full"
         disableDefaultUI={true}
         gestureHandling="greedy"
+        mapTypeId={mapType}
       >
         <MapController />
         <SearchPanner searchResult={searchResult || null} />
