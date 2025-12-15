@@ -179,18 +179,18 @@ export default function Home() {
 
 	return (
 		<div className="h-screen w-screen flex flex-col">
-			<header className="bg-transparent text-background p-4 px-6 z-50 flex items-center gap-4 justify-between absolute top-0 left-0 w-full">
+			<header className="bg-transparent text-background p-2 sm:p-4 px-3 sm:px-6 z-50 flex items-center gap-2 sm:gap-4 justify-between absolute top-0 left-0 w-full">
 				<Image
 					src={uscLogo}
 					alt="USC Logo"
-					className="w-10 h-10 cursor-pointer md:w-15 md:h-15"
+					className="w-8 h-8 sm:w-10 sm:h-10 cursor-pointer flex-shrink-0"
 				/>
-				<div className="relative search-container">
-					<div className="bg-white rounded-full px-4 py-2 shadow-[0px_1px_4px_rgba(0,0,0,0.3)]">
+				<div className="relative search-container flex-1 max-w-md">
+					<div className="bg-white rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-[0px_1px_4px_rgba(0,0,0,0.3)]">
 						<input
 							type="text"
 							placeholder="Search USC Virtual Tour"
-							className="bg-transparent outline-none w-200 text-black"
+							className="bg-transparent outline-none w-full text-black text-sm sm:text-base"
 							value={searchQuery}
 							onChange={(e) => handleSearch(e.target.value)}
 							onFocus={() => searchResults.length > 0 && setShowSearchResults(true)}

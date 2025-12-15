@@ -38,13 +38,13 @@ export default function BuildingPanel({ building, onClose }: BuildingPanelProps)
   console.log('Current floor data:', currentFloorData);
 
   return (
-    <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fadeIn">
-      <div className="bg-white rounded-lg shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col animate-scaleIn">
+    <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50 p-2 sm:p-4 animate-fadeIn">
+      <div className="bg-white rounded-lg shadow-2xl max-w-6xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col animate-scaleIn">
         {/* Header */}
-        <div className="bg-red-900 text-white px-6 py-4 flex justify-between items-center">
-          <div>
-            <h2 className="text-2xl font-bold">{building.name}</h2>
-            <p className="text-sm opacity-90">USC Talamban Campus</p>
+        <div className="bg-red-900 text-white px-3 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+          <div className="flex-1 min-w-0 pr-2">
+            <h2 className="text-lg sm:text-2xl font-bold truncate">{building.name}</h2>
+            <p className="text-xs sm:text-sm opacity-90">USC Talamban Campus</p>
           </div>
           <button
             onClick={onClose}
@@ -57,9 +57,9 @@ export default function BuildingPanel({ building, onClose }: BuildingPanelProps)
 
         <div className="flex-1 overflow-y-auto">
           {/* Building Stats */}
-          <div className="p-6 border-b bg-gray-50">
-            <h3 className="text-xl font-bold mb-4 text-gray-900">Building Information</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="p-3 sm:p-6 border-b bg-gray-50">
+            <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-gray-900">Building Information</h3>
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
               {floors.length > 0 && (
                 <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 animate-fadeIn" style={{ animationDelay: '100ms' }}>
                   <p className="text-sm text-gray-500 mb-1">Total Floors</p>
@@ -117,14 +117,14 @@ export default function BuildingPanel({ building, onClose }: BuildingPanelProps)
 
           {/* Floor Navigator */}
           {floors.length > 0 && (
-            <div className="p-6">
-              <h3 className="text-xl font-bold mb-4 text-gray-900">Explore Floors</h3>
-              <div className="flex flex-wrap gap-2 mb-4">
+            <div className="p-3 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-gray-900">Explore Floors</h3>
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                 {floors.map((floor, index) => (
                   <button
                     key={floor}
                     onClick={() => setSelectedFloor(selectedFloor === floor ? null : floor)}
-                    className={`px-4 py-2 rounded-lg font-semibold transition-all animate-fadeIn ${
+                    className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-semibold transition-all animate-fadeIn text-sm sm:text-base ${
                       selectedFloor === floor
                         ? 'bg-red-900 text-white shadow-lg scale-105'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md hover:scale-105'
@@ -171,10 +171,10 @@ export default function BuildingPanel({ building, onClose }: BuildingPanelProps)
         </div>
 
         {/* Footer */}
-        <div className="border-t px-6 py-4 bg-gray-50 flex justify-end">
+        <div className="border-t px-3 sm:px-6 py-3 sm:py-4 bg-gray-50 flex justify-end">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-red-900 text-white rounded-lg hover:bg-red-950 transition-all hover:scale-105 font-medium shadow-md hover:shadow-lg"
+            className="px-4 sm:px-6 py-2 bg-red-900 text-white rounded-lg hover:bg-red-950 transition-all hover:scale-105 font-medium shadow-md hover:shadow-lg text-sm sm:text-base"
           >
             Close
           </button>

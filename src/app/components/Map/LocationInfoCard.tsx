@@ -32,12 +32,12 @@ export default function LocationInfoCard({ location, onClose, onGetDirections }:
   const categoryColors = location.category ? getCategoryColor(location.category) : { bg: 'bg-gray-600', text: 'text-gray-600', border: 'border-gray-600' };
 
   return (
-    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl w-80 z-10 overflow-hidden border border-gray-200">
+    <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl w-[calc(100vw-2rem)] max-w-sm sm:w-80 z-10 overflow-hidden border border-gray-200">
       {/* Header with category color */}
-      <div className={`${categoryColors.bg} text-white px-4 py-3`}>
+      <div className={`${categoryColors.bg} text-white px-3 sm:px-4 py-2 sm:py-3`}>
         <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-lg font-bold">{location.name}</h3>
+          <div className="flex-1 min-w-0 pr-2">
+            <h3 className="text-base sm:text-lg font-bold truncate">{location.name}</h3>
             {location.category && (
               <p className="text-xs opacity-90 mt-1 capitalize">
                 {location.category.replace(/_/g, ' / ')}
@@ -55,7 +55,7 @@ export default function LocationInfoCard({ location, onClose, onGetDirections }:
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3">
+      <div className="p-3 sm:p-4 space-y-2 sm:space-y-3 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto">
         {location.description && (
           <p className="text-sm text-gray-700">{location.description}</p>
         )}

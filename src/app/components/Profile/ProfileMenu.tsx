@@ -72,10 +72,10 @@ export default function ProfileMenu() {
 	};
 
 	return (
-		<div className="relative" ref={menuRef}>
+		<div className="relative flex-shrink-0" ref={menuRef}>
 			<button
 				onClick={() => setIsOpen(!isOpen)}
-				className={`rounded-full p-1 transition-colors ${
+				className={`rounded-full p-0.5 sm:p-1 transition-colors ${
 					session ? 'bg-green-700 hover:bg-green-800' : 'bg-gray-400 hover:bg-gray-500'
 				}`}
 				aria-label="Profile menu"
@@ -83,19 +83,19 @@ export default function ProfileMenu() {
 				<Image
 					src={profileIcon}
 					alt="Profile"
-					className="w-8 h-8 cursor-pointer brightness-0 invert"
+					className="w-6 h-6 sm:w-8 sm:h-8 cursor-pointer brightness-0 invert"
 				/>
 			</button>
 
 			{isOpen && (
-				<div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-500">
+				<div className="absolute right-0 mt-2 w-56 sm:w-64 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-500">
 					{/* Profile Section */}
-					<div className="px-4 py-3 border-b border-gray-200">
-						<div className="flex items-center gap-3">
-							<div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+					<div className="px-3 sm:px-4 py-2 sm:py-3 border-b border-gray-200">
+						<div className="flex items-center gap-2 sm:gap-3">
+							<div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center ${
 								session ? 'bg-green-700' : 'bg-gray-300'
 							}`}>
-								<span className={`font-bold text-base leading-none ${
+								<span className={`font-bold text-sm sm:text-base leading-none ${
 									session ? 'text-white' : 'text-gray-600'
 								}`}>
 									{getUserInitials()}

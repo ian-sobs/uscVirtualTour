@@ -26,12 +26,12 @@ export default function BuildingInfoCard({ building, onClose, onGetDirections, o
   };
 
   return (
-    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl w-80 z-10 overflow-hidden border border-gray-200">
+    <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl w-[calc(100vw-2rem)] max-w-sm sm:w-80 z-10 overflow-hidden border border-gray-200">
       {/* Header with solid red matching building marker */}
-      <div className="bg-red-900 text-white px-4 py-3">
+      <div className="bg-red-900 text-white px-3 sm:px-4 py-2 sm:py-3">
         <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-lg font-bold">{building.name}</h3>
+          <div className="flex-1 min-w-0 pr-2">
+            <h3 className="text-base sm:text-lg font-bold truncate">{building.name}</h3>
             <p className="text-xs opacity-90 mt-1">Building</p>
           </div>
           <button
@@ -45,7 +45,7 @@ export default function BuildingInfoCard({ building, onClose, onGetDirections, o
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3">
+      <div className="p-3 sm:p-4 space-y-2 sm:space-y-3 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto">
         {building.description && (
           <p className="text-sm text-gray-700">{building.description}</p>
         )}
@@ -121,14 +121,14 @@ export default function BuildingInfoCard({ building, onClose, onGetDirections, o
           {building.coordinates && (
             <button
               onClick={handleGetDirections}
-              className="w-full px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-950 font-bold transition-all hover:shadow-lg flex items-center justify-center gap-2"
+              className="w-full px-3 sm:px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-950 font-bold transition-all hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               <span>Get Directions</span>
             </button>
           )}
           <button
             onClick={onViewDetails}
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-bold transition-all hover:shadow-lg flex items-center justify-center gap-2"
+            className="w-full px-3 sm:px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-bold transition-all hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base"
           >
             <span>View Details</span>
           </button>
