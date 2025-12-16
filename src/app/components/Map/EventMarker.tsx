@@ -9,9 +9,10 @@ interface EventMarkerProps {
   location: Location;
   onClick?: (event: Event, location: Location) => void;
   isHighlighted?: boolean;
+  positionOverride?: google.maps.LatLngLiteral;
 }
 
-export default function EventMarker({ event, location, onClick, isHighlighted = false }: EventMarkerProps) {
+export default function EventMarker({ event, location, onClick, isHighlighted = false, positionOverride }: EventMarkerProps) {
   const getEventStatus = () => {
     const now = new Date();
     const startDate = new Date(event.date_time_start);
@@ -27,7 +28,7 @@ export default function EventMarker({ event, location, onClick, isHighlighted = 
 
   return (
     <AdvancedMarker
-      position={location.coordinates}
+      position={positionOverride || location.coordinates}
       onClick={() => onClick?.(event, location)}
     >
       <div className={`relative group cursor-pointer transform hover:scale-110 transition-all ${

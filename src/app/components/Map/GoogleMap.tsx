@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { APIProvider, Map } from '@vis.gl/react-google-maps';
+import { useState, useEffect, useMemo } from 'react';
+import { APIProvider, Map as GoogleMapComponent } from '@vis.gl/react-google-maps';
 import { MAP_CONFIG } from '@/app/lib/googleMaps';
 import { CategoryFilter, Building, Location, Event } from '@/types';
 import MapController from './MapController';
@@ -16,6 +16,9 @@ import EventInfoCard from './EventInfoCard';
 import MarkerInfoCard from './MarkerInfoCard';
 import SearchPanner from './SearchPanner';
 import EventPanner from './EventPanner';
+import SpiderLines from './SpiderLines';
+import ClusterMarker from './ClusterMarker';
+import { useSpiderfyManager, SpiderfyMarker } from './SpiderfyManager';
 
 interface GoogleMapProps {
   activeFilters: CategoryFilter;
@@ -208,12 +211,37 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
   
   // Handle location click
   const handleLocationClick = (location: Location) => {
+    // Check if this is an overlapping marker
+    if (location.coordinates) {
+      const marker: SpiderfyMarker = {
+        id: `location-${location.id}`,
+        position: location.coordinates,
+        type: 'location',
+      };
+      
+      const shouldIntercept = handleOverlapClick(marker);
+      if (shouldIntercept) return; // Spiderfying, don't show info card yet
+    }
+
     setSelectedLocation(location);
     setSelectedBuilding(null);
   };
   
   // Handle building click
   const handleBuildingClick = (building: Building) => {
+    // Check if this is an overlapping marker
+    const location = locations.find(l => l.id === building.location_id);
+    if (location && location.coordinates) {
+      const marker: SpiderfyMarker = {
+        id: `building-${building.id}`,
+        position: location.coordinates,
+        type: 'building',
+      };
+      
+      const shouldIntercept = handleOverlapClick(marker);
+      if (shouldIntercept) return; // Spiderfying, don't show info card yet
+    }
+
     setSelectedBuilding(building);
     setSelectedLocation(null);
   };
@@ -238,9 +266,85 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
   const filteredEvents = events.filter(event => {
     return activeFilters.events;
   });
+
+  // Prepare markers for spiderfying
+  const spiderfyMarkers = useMemo((): SpiderfyMarker[] => {
+    const markers: SpiderfyMarker[] = [];
+
+    // Add location markers (excluding those with buildings)
+    filteredLocations.forEach(location => {
+      const hasBuilding = buildings.some(b => b.location_id === location.id);
+      if (!hasBuilding && location.coordinates) {
+        markers.push({
+          id: `location-${location.id}`,
+          position: location.coordinates,
+          type: 'location',
+        });
+      }
+    });
+
+    // Add building markers
+    filteredBuildings.forEach(building => {
+      const location = locations.find(l => l.id === building.location_id);
+      if (location && location.coordinates) {
+        markers.push({
+          id: `building-${building.id}`,
+          position: location.coordinates,
+          type: 'building',
+        });
+      }
+    });
+
+    // Add event markers
+    filteredEvents.forEach(event => {
+      const location = locations.find(l => l.id === event.location_id);
+      if (location && location.coordinates) {
+        markers.push({
+          id: `event-${event.id}`,
+          position: location.coordinates,
+          type: 'event',
+        });
+      }
+    });
+
+    return markers;
+  }, [filteredLocations, filteredBuildings, filteredEvents, buildings, locations]);
+
+  // Initialize spiderfying manager
+  const {
+    getMarkerPosition,
+    isOverlapping,
+    handleOverlapClick,
+    collapseSpiderfy,
+    spiderfiedPositions,
+    overlappingGroups,
+    activeSpiderfyGroup,
+    spiderfyGroup,
+  } = useSpiderfyManager(spiderfyMarkers, true);
+
+  // Create a map of original positions for spider lines
+  const originalPositionsMap = useMemo(() => {
+    const map = new Map<string | number, google.maps.LatLngLiteral>();
+    spiderfyMarkers.forEach(marker => {
+      map.set(marker.id, marker.position);
+    });
+    return map;
+  }, [spiderfyMarkers]);
   
   // Handle event click
   const handleEventClick = (event: Event, location: Location) => {
+    // Check if this is an overlapping marker
+    if (location.coordinates) {
+      const marker: SpiderfyMarker = {
+        id: `event-${event.id}`,
+        position: location.coordinates,
+        type: 'event',
+      };
+      
+      const shouldIntercept = handleOverlapClick(marker);
+      if (shouldIntercept) return; // Spiderfying, don't show info card yet
+    }
+
     setSelectedEvent(event);
     setSelectedLocation(null);
     setSelectedBuilding(null);
@@ -255,7 +359,7 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
 
   return (
     <APIProvider apiKey={MAP_CONFIG.apiKey}>
-      <Map
+      <GoogleMapComponent
         defaultCenter={MAP_CONFIG.center}
         defaultZoom={MAP_CONFIG.zoom}
         minZoom={15}
@@ -268,6 +372,7 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
         <MapController />
         <SearchPanner searchResult={searchResult || null} />
         <EventPanner selectedEventId={selectedEventId || null} events={events} locations={locations} />
+        <SpiderLines spiderfiedPositions={spiderfiedPositions} originalPositions={originalPositionsMap} />
         
         <RouteCalculator
           origin={routeOrigin}
@@ -275,6 +380,22 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
           onRouteCalculated={setRouteResult}
           onClearRoute={() => setRouteResult(null)}
         />
+
+        {/* Render cluster markers for overlapping groups that haven't been spiderfied */}
+        {!isLoading && Array.from(overlappingGroups.entries()).map(([groupKey, groupMarkers]) => {
+          // Don't show cluster if this group is currently spiderfied
+          if (activeSpiderfyGroup === groupKey) return null;
+          
+          const position = groupMarkers[0].position;
+          return (
+            <ClusterMarker
+              key={`cluster-${groupKey}`}
+              position={position}
+              count={groupMarkers.length}
+              onClick={() => spiderfyGroup(groupKey)}
+            />
+          );
+        })}
         
         {/* Render location markers */}
         {!isLoading && filteredLocations.map((location) => {
@@ -282,12 +403,23 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
           const hasBuilding = buildings.some(b => b.location_id === location.id);
           if (hasBuilding || !location.coordinates) return null;
           
+          const markerId = `location-${location.id}`;
+          const positionKey = `${location.coordinates.lat.toFixed(6)},${location.coordinates.lng.toFixed(6)}`;
+          
+          // Don't render if part of a non-spiderfied cluster
+          if (overlappingGroups.has(positionKey) && activeSpiderfyGroup !== positionKey) {
+            return null;
+          }
+          
+          const spiderfiedPosition = getMarkerPosition(markerId, location.coordinates);
+          
           return (
             <LocationMarker
-              key={`location-${location.id}`}
+              key={markerId}
               location={location}
               onClick={handleLocationClick}
               isHighlighted={searchResult?.type === 'location' && searchResult?.locationData?.id === location.id}
+              positionOverride={spiderfiedPosition}
             />
           );
         })}
@@ -297,13 +429,24 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
           const location = locations.find(l => l.id === building.location_id);
           if (!location || !location.coordinates) return null;
           
+          const markerId = `building-${building.id}`;
+          const positionKey = `${location.coordinates.lat.toFixed(6)},${location.coordinates.lng.toFixed(6)}`;
+          
+          // Don't render if part of a non-spiderfied cluster
+          if (overlappingGroups.has(positionKey) && activeSpiderfyGroup !== positionKey) {
+            return null;
+          }
+          
+          const spiderfiedPosition = getMarkerPosition(markerId, location.coordinates);
+          
           return (
             <BuildingMarker
-              key={`building-${building.id}`}
+              key={markerId}
               building={building}
               location={location}
               onClick={handleBuildingClick}
               isHighlighted={searchResult?.type === 'building' && searchResult?.buildingData?.id === building.id}
+              positionOverride={spiderfiedPosition}
             />
           );
         })}
@@ -313,21 +456,29 @@ export default function GoogleMap({ activeFilters, selectedEventId, onEventSelec
           const location = locations.find(l => l.id === event.location_id);
           if (!location || !location.coordinates) return null;
           
+          const markerId = `event-${event.id}`;
+          const positionKey = `${location.coordinates.lat.toFixed(6)},${location.coordinates.lng.toFixed(6)}`;
+          
+          // Don't render if part of a non-spiderfied cluster
+          if (overlappingGroups.has(positionKey) && activeSpiderfyGroup !== positionKey) {
+            return null;
+          }
+          
+          const spiderfiedPosition = getMarkerPosition(markerId, location.coordinates);
+          
           return (
             <EventMarker
-              key={`event-${event.id}`}
+              key={markerId}
               event={event}
               location={location}
               onClick={handleEventClick}
-              isHighlighted={
-                !!(searchResult?.type === 'event' && searchResult?.eventData?.id === event.id) ||
-                !!(selectedEventId && selectedEventId === event.id)
-              }
+              isHighlighted={!!(searchResult?.type === 'event' && searchResult?.eventData?.id === event.id)}
+              positionOverride={spiderfiedPosition}
             />
           );
         })}
        
-      </Map>
+      </GoogleMapComponent>
 
       <RouteInfoPanel
         route={routeResult}
