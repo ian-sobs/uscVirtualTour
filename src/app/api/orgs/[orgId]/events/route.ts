@@ -20,7 +20,7 @@ export async function GET(
         const dateTimeEnd = searchParams.get('dateTimeEnd')
         const name = searchParams.get('name')
 
-        const filters: SQL[] = [];
+        const filters: any[] = [];
 
         if(dateTimeStart) filters.push(gte(events.date_time_start, new Date(dateTimeStart)));
         if(dateTimeEnd) filters.push(lte(events.date_time_end, new Date(dateTimeEnd)));
@@ -35,7 +35,22 @@ export async function GET(
             filters.push(eq(events.visibility, "everyone"))
         }
         else if(getUserRole(session.user) == 'student'){
-            filters.push(inArray(events.visibility, ["everyone", "only_students"]))
+            const userOrgs = await getUserOrgs(session.user)
+            
+            if(userOrgs.length > 0){
+                filters.push(
+                    or(
+                        inArray(events.visibility, ["everyone", "only_students"]),
+                        and(
+                            inArray(events.org_id, userOrgs),
+                            eq(events.visibility, "only_organization_members")
+                        )
+                    )
+                )
+            }
+            else{
+                filters.push(inArray(events.visibility, ["everyone", "only_students"]))
+            }
         }
 
         const result = await db.select({
@@ -46,7 +61,11 @@ export async function GET(
             custom_marker: events.custom_marker,
             org_id: events.org_id,
             visibility: events.visibility
-        }).from(events).where(and(...filters));
+        }).from(events).where(
+            filters.length > 0
+                ? and(...filters)
+                : undefined
+        );
 
         return NextResponse.json({ data: result });
         
