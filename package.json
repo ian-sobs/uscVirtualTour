@@ -4,8 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "npx drizzle-kit generate && npx drizzle-kit migrate && npx tsx src/index.ts && next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start"
+    "build": "next build",
+    "start": "next start",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.4.2",
