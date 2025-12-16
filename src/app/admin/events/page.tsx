@@ -1,33 +1,166 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import AdminMapPicker from '@/app/components/Map/AdminMapPicker';
-import { Event } from '@/types';
+import { Event, Organization, Location } from '@/types';
 
 export default function EventsPage() {
+  const [campuses, setCampuses] = useState<{
+    created_at: Date;
+    updated_at: Date | null;
+    id: number;
+    name: string;
+    address: string | null; 
+  }[]>([]);
+
+  useEffect(() => {
+    const fetchCampuses = async () => {
+      try {
+        const res = await fetch('/api/campuses', {
+          method: "GET"
+        });
+        if (!res.ok) throw new Error('Failed to fetch campuses');
+
+        const json = await res.json();
+        if (json.success) {
+          setCampuses(json.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch campuses', err);
+      }
+    };
+
+    fetchCampuses();
+  }, []);
+
+  const [locations, setLocations] = useState<Location[]>([]);
+
+  useEffect(() => {
+    if (campuses.length === 0) return;
+
+    const fetchAllLocations = async () => {
+      try {
+        const locationRequests = campuses.map((campus) =>
+          fetch(`/api/campuses/${campus.id}/locations`, {
+            method: "GET"
+          })
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(`Failed to fetch locations for campus ${campus.id}`);
+              }
+              return res.json();
+            })
+            .then((json) => json.success ? json.data : [])
+        );
+
+        // Wait for all campuses
+        const locationsByCampus = await Promise.all(locationRequests);
+
+        // Compile into a single array
+        const compiledLocations = locationsByCampus.flat();
+
+        setLocations(compiledLocations);
+      } catch (err) {
+        console.error('Failed to fetch locations', err);
+      }
+    };
+
+    fetchAllLocations();
+  }, [campuses]);
+
+
   const [events, setEvents] = useState<Event[]>([
-    {
-      id: 1,
-      name: 'Campus Tour',
-      description: 'Guided tour of the main campus',
-      date_time_start: '2024-12-01T10:00',
-      date_time_end: '2024-12-01T12:00',
-      org_id: 1,
-      visibility: 'everyone',
-    },
+    // {
+    //   id: 1,
+    //   name: 'Campus Tour',
+    //   description: 'Guided tour of the main campus',
+    //   date_time_start: '2024-12-01T10:00',
+    //   date_time_end: '2024-12-01T12:00',
+    //   org_id: 1,
+    //   visibility: 'everyone',
+    //   location_id: 9
+    // },
+    // {
+    //   id: 3,
+    //   name: 'Donation drive',
+    //   description: 'Donating in cash and in kind for the victims of bagyong Tinio',
+    //   date_time_start: '2024-12-01T10:00',
+    //   date_time_end: '2024-12-01T12:00',
+    //   org_id: 3,
+    //   visibility: 'everyone',
+    // },
   ]);
+
+  useEffect(() => {
+    if (campuses.length === 0) return;
+
+    const fetchEvents = async () => {
+      try {
+        const eventRequests = organizations.map((org) =>
+          fetch(`/api/orgs/${org.id}/events`, {
+            method: "GET"
+          })
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(`Failed to fetch events for org ${org.id}`);
+              }
+              return res.json();
+            })
+            .then((json) => json.success ? json.data : [])
+        );
+
+        // Wait for all events
+        const eventsByOrg = await Promise.all(eventRequests);
+
+        // Compile into a single array
+        const compiledEvents = eventsByOrg.flat();
+
+        setEvents(compiledEvents);
+      } catch (err) {
+        console.error('Failed to fetch events', err);
+      }
+    };
+
+    fetchEvents();
+  }, [locations]);
+
+  const [organizations, setOrganizations] = useState<Organization[]>([])
+  const adminOrgs = organizations.filter(org => !org.is_student_org);
   
-  // Mock organizations data - in real app, fetch from API
-  const [organizations] = useState([
-    { id: 1, name: 'USC Alumni Association', is_student_org: false },
-    { id: 2, name: 'USC Administration', is_student_org: false },
-    { id: 3, name: 'Supreme Student Council', is_student_org: true }, // Should not appear
-    { id: 4, name: 'Athletics Department', is_student_org: false },
-    { id: 5, name: 'Computer Science Society', is_student_org: true }, // Should not appear
-  ]);
   
-  // Filter to only non-student organizations
-  const adminOrganizations = organizations.filter(org => !org.is_student_org);
+
+  useEffect(() => {
+    const fetchOrgs = async () => {
+      try {
+        const res = await fetch('/api/orgs', {
+          method: "GET"
+        });
+        if (!res.ok) throw new Error('Failed to fetch organizations');
+        
+        const json = await res.json();
+        if (json.data.length > 0) {
+          setOrganizations(json.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch organizations', err);
+      }
+    };
+    fetchOrgs();
+  }, []);
+
+  
+
+  // // Mock organizations data - in real app, fetch from API
+  // const [organizations] = useState([
+  //   { id: 1, name: 'USC Alumni Association', is_student_org: false },
+  //   { id: 2, name: 'USC Administration', is_student_org: false },
+  //   { id: 3, name: 'Supreme Student Council', is_student_org: true }, // Should not appear
+  //   { id: 4, name: 'Athletics Department', is_student_org: false },
+  //   { id: 5, name: 'Computer Science Society', is_student_org: true }, // Should not appear
+  // ]);
+
+  
+
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
@@ -40,8 +173,13 @@ export default function EventsPage() {
     event_group_id: 0,
     org_id: 0,
     visibility: 'everyone' as 'everyone' | 'only_students' | 'only_organization_members',
+    location_id: 0
   });
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    console.log(formData)
+  }, [formData])
 
   const handleAdd = () => {
     setEditingEvent(null);
@@ -54,6 +192,7 @@ export default function EventsPage() {
       event_group_id: 0,
       org_id: 0,
       visibility: 'everyone',
+      location_id: 0
     });
     setIsModalOpen(true);
   };
@@ -69,6 +208,7 @@ export default function EventsPage() {
       event_group_id: event.event_group_id || 0,
       org_id: event.org_id || 0,
       visibility: event.visibility || 'everyone',
+      location_id: event.location_id
     });
     setIsModalOpen(true);
   };
@@ -82,6 +222,7 @@ export default function EventsPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (editingEvent) {
       setEvents(
         events.map((ev) =>
@@ -163,7 +304,7 @@ export default function EventsPage() {
                 </td>
                 <td className="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                   <div className="text-xs sm:text-sm text-gray-900">
-                    {adminOrganizations.find(org => org.id === event.org_id)?.name || 'No Organization'}
+                    {organizations.find(org => org.id === event.org_id)?.name || 'No Organization'}
                   </div>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
@@ -247,7 +388,7 @@ export default function EventsPage() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black cursor-pointer"
                   >
                     <option value={0}>No Organization</option>
-                    {adminOrganizations.map(org => (
+                    {adminOrgs.map(org => (
                       <option key={org.id} value={org.id}>
                         {org.name}
                       </option>
@@ -256,6 +397,28 @@ export default function EventsPage() {
                   <p className="text-xs text-gray-500 mt-1">
                     Only non-student organizations are available for admin posting
                   </p>
+                </div>
+
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
+                    Location
+                  </label>
+                  <select
+                    value={formData.location_id}
+                    onChange={(e) => setFormData({ ...formData, location_id: parseInt(e.target.value) || 0 })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black cursor-pointer"
+                  >
+                    <option value={0}>No location</option>
+                    {locations.map(location => (
+                      <option key={location.id} value={location.id}>
+                        {location.name}
+                      </option>
+                    ))}
+                  </select>
+                  {/* <p className="text-xs text-gray-500 mt-1">
+                    Only non-student organizations are available for admin posting
+                  </p> */}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -267,7 +430,10 @@ export default function EventsPage() {
                       type="datetime-local"
                       required
                       value={formData.date_time_start}
-                      onChange={(e) => setFormData({ ...formData, date_time_start: e.target.value })}
+                      onChange={(e) => {
+                        console.log("date_time_start: ", e.target.value)
+                        setFormData({ ...formData, date_time_start: e.target.value })
+                      }}
                       className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-700 focus:border-transparent text-black"
                     />
                   </div>
@@ -305,6 +471,7 @@ export default function EventsPage() {
                   <button
                     type="submit"
                     className="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base bg-green-700 text-white rounded-lg hover:bg-green-800 font-bold cursor-pointer"
+                    onClick={(e) => handleSubmit(e)}
                   >
                     {editingEvent ? 'Update' : 'Create'}
                   </button>
