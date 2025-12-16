@@ -37,7 +37,9 @@ export async function GET(request: NextRequest) {
             where
         })
 
-        return NextResponse.json({data: result})
+        return NextResponse.json({
+            data: result
+        })
     
     } catch (err) {
         console.error(err);
