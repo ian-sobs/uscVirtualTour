@@ -254,10 +254,27 @@ export default function EventsPage() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     if (confirm('Are you sure you want to delete this event?')) {
-      setEvents(events.filter((e) => e.id !== id));
-      // TODO: Call API to delete
+      
+      try{
+        const res = await fetch(`/api/events/${id}`, {
+          method: "DELETE"
+        })
+
+        if (!res.ok) {
+          throw new Error("Failed to update event");
+        }
+
+        const json = await res.json();
+        const {data} = json
+
+        if(data.length > 0){
+          setEvents(events.filter((e) => e.id !== id));
+        }
+      }catch (error){
+        console.error("Error deleting event:", error);
+      }
     }
   };
 
