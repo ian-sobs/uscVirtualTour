@@ -15,6 +15,16 @@ export async function GET(
 
     try {        
         const { orgId } = await params
+
+        const orgIdNum = isNumericString(orgId) ? parseInt(orgId) : null;
+
+        if(orgIdNum === null){
+            return NextResponse.json(
+                {error: "Given org ID has to be a numeric string or else it is invalid."},
+                {status: 401},
+            )
+        }
+
         const searchParams = request.nextUrl.searchParams
         const dateTimeStart = searchParams.get('dateTimeStart')
         const dateTimeEnd = searchParams.get('dateTimeEnd')
@@ -27,7 +37,7 @@ export async function GET(
 
         if(name) filters.push(ilike(events.name, `${name}%`));
 
-        filters.push(eq(events.org_id, parseInt(orgId)));
+        filters.push(eq(events.org_id, orgIdNum));
 
         const session = await checkAuth(request)
 
@@ -35,22 +45,16 @@ export async function GET(
             filters.push(eq(events.visibility, "everyone"))
         }
         else if(getUserRole(session.user) == 'student'){
-            const userOrgs = await getUserOrgs(session.user)
-            
-            if(userOrgs.length > 0){
-                filters.push(
-                    or(
-                        inArray(events.visibility, ["everyone", "only_students"]),
-                        and(
-                            inArray(events.org_id, userOrgs),
-                            eq(events.visibility, "only_organization_members")
-                        )
+            filters.push(
+                or(
+                    inArray(events.visibility, ["everyone", "only_students"]),
+                    and(
+                        eq(events.org_id, orgIdNum),
+                        eq(events.visibility, "only_organization_members")
                     )
                 )
-            }
-            else{
-                filters.push(inArray(events.visibility, ["everyone", "only_students"]))
-            }
+            )
+
         }
 
         const result = await db.select({
