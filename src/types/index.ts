@@ -50,14 +50,14 @@ export interface Building {
 export interface Event {
   id: number;
   name: string;
-  theme: string;
+  theme?: string;
   description: string;
   date_time_start: string;
   date_time_end: string;
   custom_marker?: string;
   event_group_id?: number;
   org_id?: number;
-  visibility: 'public' | 'private';
+  visibility: 'everyone'| 'only_students'| 'only_organization_members';
   location_id: number;
 }
 

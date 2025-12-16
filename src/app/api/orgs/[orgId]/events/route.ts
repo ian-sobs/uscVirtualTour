@@ -60,9 +60,10 @@ export async function GET(
         const result = await db.select({
             id: events.id,
             name: events.name,
+            description: events.description,
             date_time_start: events.date_time_start,
             date_time_end: events.date_time_end,
-            custom_marker: events.custom_marker,
+            // custom_marker: events.custom_marker,
             org_id: events.org_id,
             visibility: events.visibility
         }).from(events).where(
