@@ -230,7 +230,7 @@ export default function AdminUsersPage() {
         try{
           const retOrgsKickedId = await Promise.all(
             orgsKickedFrom.map((orgId) =>
-              fetch(`/orgs/${orgId}/members/${editingUser.id}`, {
+              fetch(`/api/orgs/${orgId}/members/${editingUser.id}`, {
                 method: 'DELETE',
               })
             )
@@ -250,7 +250,7 @@ export default function AdminUsersPage() {
         try{
           const retOrgsJoinedId = await Promise.all(
             orgsJoined.map((orgId) =>
-              fetch(`/orgs/${orgId}/members`, {
+              fetch(`/api/orgs/${orgId}/members`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
